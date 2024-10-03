@@ -5,6 +5,7 @@ import { AuthModule } from './auth.module';
 import { UserModule } from './user.module';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { PostModule } from './post.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JwtModule } from '@nestjs/jwt';
     MainModule,
     AuthModule,
     UserModule,
+    PostModule,
   ],
   controllers: [],
   providers: [],
