@@ -14,13 +14,13 @@ export class UserEntity {
   user_id: string;
 
   @Column()
+  passphrase: string;
+
+  @Column()
   email: string;
 
   @Column()
   profile_image: string;
-
-  @Column()
-  password: string;
 
   @CreateDateColumn()
   created_at: Date;
