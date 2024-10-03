@@ -1,7 +1,12 @@
 import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller, Request, UseGuards } from '@nestjs/common';
 import { MessageDto } from 'src/dto/message.dto';
-import { GetPostPageDto, PostBodyDto, PostDataDto } from 'src/dto/post.dto';
+import {
+  GetPostDto,
+  GetPostPageDto,
+  PostBodyDto,
+  PostDataDto,
+} from 'src/dto/post.dto';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { PostService } from 'src/service/post/post.service';
 import { IRequest } from 'src/types/headers';
@@ -16,6 +21,11 @@ export class PostController {
     @TypedQuery() query: GetPostPageDto,
   ): Promise<IPaginationData<PostDataDto[]>> {
     return this.postService.getPosts(query);
+  }
+
+  @TypedRoute.Get('getPost')
+  public async getPost(@TypedQuery() query: GetPostDto) {
+    return this.postService.getPost(query);
   }
 
   @TypedRoute.Post('publish')

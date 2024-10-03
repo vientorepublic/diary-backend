@@ -3,9 +3,15 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GetPostPageDto, PostBodyDto, PostDataDto } from 'src/dto/post.dto';
+import {
+  GetPostDto,
+  GetPostPageDto,
+  PostBodyDto,
+  PostDataDto,
+} from 'src/dto/post.dto';
 import { PostEntity } from 'src/entity/post.entity';
 import { UserEntity } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -86,32 +92,64 @@ export class PostService {
   ): Promise<IPaginationData<PostDataDto[]>> {
     const { page } = query;
 
-    const posts = await this.postRepository.find();
+    const posts = (await this.postRepository.find()).reverse();
     if (!posts.length) throw new NotFoundException('등록된 게시글이 없습니다.');
 
     const data: PostDataDto[] = [];
     for (let i = 0; i < posts.length; i++) {
-      const user = await this.userRepository.findOne({
-        order: {
-          id: 'ASC',
-        },
-        where: {
-          user_id: posts[i].user_id,
-        },
-      });
-      const profileImage = user ? user.profile_image : '';
-      data.push({
-        title: posts[i].title,
-        text: posts[i].text,
-        author: posts[i].user_id,
-        profile_image: profileImage,
-        created_at: Number(posts[i].created_at),
-      });
+      if (posts[i].public_post) {
+        const publisher = await this.userRepository.findOne({
+          where: {
+            user_id: posts[i].user_id,
+          },
+        });
+        const profileImage = publisher ? publisher.profile_image : '';
+        data.push({
+          id: posts[i].id,
+          title: posts[i].title,
+          text: posts[i].text,
+          author: posts[i].user_id,
+          profile_image: profileImage,
+          created_at: Number(posts[i].created_at) || 0,
+        });
+      }
     }
 
     const pagination = paginator.paginateData(data, page, 6);
     return pagination;
   }
 
-  public async draftPosts() {}
+  public async getPost(query: GetPostDto): Promise<PostDataDto> {
+    const { id } = query;
+    const postId = Number(id) || 0;
+    const post = await this.postRepository.findOne({
+      where: {
+        id: postId,
+      },
+    });
+    if (!post) {
+      throw new NotFoundException('해당 게시글을 찾을 수 없습니다.');
+    }
+    if (!post.public_post) {
+      throw new UnauthorizedException(
+        '해당 게시글에 접근할 수 있는 권한이 없습니다.',
+      );
+    }
+    const publisher = await this.userRepository.findOne({
+      where: {
+        user_id: post.user_id,
+      },
+    });
+    const profileImage = publisher ? publisher.profile_image : '';
+    return {
+      id: post.id,
+      title: post.title,
+      text: post.text,
+      author: post.user_id,
+      profile_image: profileImage,
+      created_at: Number(post.created_at) || 0,
+    };
+  }
+
+  public async draftPost() {}
 }

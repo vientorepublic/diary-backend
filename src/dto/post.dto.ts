@@ -7,6 +7,7 @@ export class PostBodyDto extends RecaptchaDto {
 }
 
 export class PostDataDto {
+  id: number;
   title: string;
   text: string;
   author: string;
@@ -16,4 +17,8 @@ export class PostDataDto {
 
 export class GetPostPageDto {
   page: number;
+}
+
+export class GetPostDto {
+  id: number;
 }
