@@ -38,10 +38,7 @@ export class PostService {
     private readonly postRepository: Repository<PostEntity>,
   ) {}
 
-  public async publishPost(
-    req: IRequest,
-    dto: PostBodyDto,
-  ): Promise<MessageDto> {
+  public async savePost(req: IRequest, dto: PostBodyDto): Promise<MessageDto> {
     const { title, text, public_post, g_recaptcha_response } = dto;
     const ip = (req.headers['x-forwarded-for'] ??
       req.socket.remoteAddress) as string;
@@ -100,7 +97,7 @@ export class PostService {
     };
   }
 
-  public async getPosts(
+  public async getPublicPosts(
     query: GetPostPageDto,
   ): Promise<IPaginationData<PostPreviewDto[]>> {
     const { page } = query;
@@ -132,7 +129,54 @@ export class PostService {
     return pagination;
   }
 
-  public async getPost(query: GetPostDto): Promise<PostDataDto> {
+  public async getPrivatePosts(
+    req: IRequest,
+    query: GetPostPageDto,
+  ): Promise<IPaginationData<PostPreviewDto[]>> {
+    const { page } = query;
+
+    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const user = await this.userRepository.findOne({
+      where: {
+        user_id: decoded.user_id,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+    }
+
+    const posts = (await this.postRepository.find()).reverse();
+    if (!posts.length) throw new NotFoundException('등록된 게시글이 없습니다.');
+
+    const data: PostPreviewDto[] = [];
+    for (let i = 0; i < posts.length; i++) {
+      if (!posts[i].public_post && posts[i].user_id === user.user_id) {
+        const publisher = await this.userRepository.findOne({
+          where: {
+            user_id: posts[i].user_id,
+          },
+        });
+        const profileImage = publisher ? publisher.profile_image : '';
+        data.push({
+          id: posts[i].id,
+          title: posts[i].title,
+          preview: posts[i].preview,
+          author: posts[i].user_id,
+          profile_image: profileImage,
+          created_at: Number(posts[i].created_at) || 0,
+        });
+      }
+    }
+
+    if (!data.length) {
+      throw new NotFoundException('비공개 게시글이 없습니다.');
+    }
+
+    const pagination = paginator.paginateData(data, page, 6);
+    return pagination;
+  }
+
+  public async getPublicPost(query: GetPostDto): Promise<PostDataDto> {
     const { id } = query;
     const postId = Number(id) || 0;
     const post = await this.postRepository.findOne({
@@ -160,6 +204,44 @@ export class PostService {
       text: post.text,
       author: post.user_id,
       profile_image: profileImage,
+      created_at: Number(post.created_at) || 0,
+    };
+  }
+
+  public async getPrivatePost(
+    req: IRequest,
+    query: GetPostDto,
+  ): Promise<PostDataDto> {
+    const { id } = query;
+    const postId = Number(id) || 0;
+    const post = await this.postRepository.findOne({
+      where: {
+        id: postId,
+      },
+    });
+    if (!post) {
+      throw new NotFoundException('해당 게시글을 찾을 수 없습니다.');
+    }
+    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const user = await this.userRepository.findOne({
+      where: {
+        user_id: decoded.user_id,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+    }
+    if (post.user_id !== user.user_id) {
+      throw new UnauthorizedException(
+        '해당 게시글에 접근할 수 있는 권한이 없습니다.',
+      );
+    }
+    return {
+      id: post.id,
+      title: post.title,
+      text: post.text,
+      author: post.user_id,
+      profile_image: user.profile_image,
       created_at: Number(post.created_at) || 0,
     };
   }

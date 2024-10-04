@@ -10,7 +10,7 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 32 })
   user_id: string;
 
   @Column()

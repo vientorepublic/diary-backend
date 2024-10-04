@@ -16,24 +16,46 @@ import { IPaginationData } from 'src/types/pagination';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @TypedRoute.Get('getPosts')
+  @TypedRoute.Get('posts')
   public async getPosts(
     @TypedQuery() query: GetPostPageDto,
   ): Promise<IPaginationData<PostPreviewDto[]>> {
-    return this.postService.getPosts(query);
+    return this.postService.getPublicPosts(query);
   }
 
-  @TypedRoute.Get('getPost')
+  @TypedRoute.Get('privatePosts')
+  @UseGuards(AuthGuard)
+  public async getPrivatePosts(
+    @Request() req: IRequest,
+    @TypedQuery() query: GetPostPageDto,
+  ) {
+    return this.postService.getPrivatePosts(req, query);
+  }
+
+  @TypedRoute.Get('view')
   public async getPost(@TypedQuery() query: GetPostDto) {
-    return this.postService.getPost(query);
+    return this.postService.getPublicPost(query);
   }
 
-  @TypedRoute.Post('publish')
+  @TypedRoute.Get('viewPrivate')
+  @UseGuards(AuthGuard)
+  public async getPrivatePost(
+    @Request() req: IRequest,
+    @TypedQuery() query: GetPostDto,
+  ) {
+    return this.postService.getPrivatePost(req, query);
+  }
+
+  @TypedRoute.Post('save')
   @UseGuards(AuthGuard)
   public async publishPost(
     @Request() req: IRequest,
     @TypedBody() dto: PostBodyDto,
   ): Promise<MessageDto> {
-    return this.postService.publishPost(req, dto);
+    return this.postService.savePost(req, dto);
   }
+
+  public async saveDraftPost() {}
+
+  public async loadDraftPost() {}
 }

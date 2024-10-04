@@ -5,7 +5,7 @@ export class PostEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 32 })
   user_id: string;
 
   @Column({ type: 'varchar', length: 50 })
