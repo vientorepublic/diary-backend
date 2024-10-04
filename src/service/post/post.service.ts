@@ -11,6 +11,7 @@ import {
   GetPostPageDto,
   PostBodyDto,
   PostDataDto,
+  PostPreviewDto,
 } from 'src/dto/post.dto';
 import { PostEntity } from 'src/entity/post.entity';
 import { UserEntity } from 'src/entity/user.entity';
@@ -61,22 +62,34 @@ export class PostService {
       throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
     }
 
-    if (title.length > 50) {
+    const trimTitle = title.trim();
+    const trimText = text.trim();
+
+    if (!trimTitle || !trimText) {
+      throw new BadRequestException('제목 또는 본문이 비어있습니다.');
+    }
+
+    if (trimTitle.length > 50) {
       throw new BadRequestException(
         '게시글 제목은 50바이트를 초과할 수 없습니다.',
       );
     }
 
-    if (text.length > 65000) {
+    if (trimText.length > 5000) {
       throw new BadRequestException(
-        '게시글 본문은 65000바이트를 초과할 수 없습니다.',
+        '게시글 본문은 5000바이트를 초과할 수 없습니다.',
       );
     }
 
+    const isPublicPost = public_post ? true : false;
+    const preview = text.substring(0, 100);
+
     const data = this.postRepository.create({
-      ...dto,
+      title: trimTitle,
+      text: trimText,
+      preview,
       user_id: user.user_id,
-      public_post: public_post ? true : false,
+      public_post: isPublicPost,
       created_at: now,
     });
 
@@ -89,13 +102,13 @@ export class PostService {
 
   public async getPosts(
     query: GetPostPageDto,
-  ): Promise<IPaginationData<PostDataDto[]>> {
+  ): Promise<IPaginationData<PostPreviewDto[]>> {
     const { page } = query;
 
     const posts = (await this.postRepository.find()).reverse();
     if (!posts.length) throw new NotFoundException('등록된 게시글이 없습니다.');
 
-    const data: PostDataDto[] = [];
+    const data: PostPreviewDto[] = [];
     for (let i = 0; i < posts.length; i++) {
       if (posts[i].public_post) {
         const publisher = await this.userRepository.findOne({
@@ -107,7 +120,7 @@ export class PostService {
         data.push({
           id: posts[i].id,
           title: posts[i].title,
-          text: posts[i].text,
+          preview: posts[i].preview,
           author: posts[i].user_id,
           profile_image: profileImage,
           created_at: Number(posts[i].created_at) || 0,

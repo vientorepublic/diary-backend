@@ -6,13 +6,20 @@ export class PostBodyDto extends RecaptchaDto {
   public_post?: string;
 }
 
-export class PostDataDto {
+export class PostDto {
   id: number;
   title: string;
-  text: string;
   author: string;
   profile_image: string;
   created_at: number;
+}
+
+export class PostPreviewDto extends PostDto {
+  preview: string;
+}
+
+export class PostDataDto extends PostDto {
+  text: string;
 }
 
 export class GetPostPageDto {

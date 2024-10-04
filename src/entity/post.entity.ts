@@ -11,6 +11,9 @@ export class PostEntity {
   @Column({ type: 'varchar', length: 50 })
   title: string;
 
+  @Column({ type: 'varchar', length: 100 })
+  preview: string;
+
   @Column({ type: 'text' })
   text: string;
 

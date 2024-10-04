@@ -5,7 +5,7 @@ import {
   GetPostDto,
   GetPostPageDto,
   PostBodyDto,
-  PostDataDto,
+  PostPreviewDto,
 } from 'src/dto/post.dto';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { PostService } from 'src/service/post/post.service';
@@ -19,7 +19,7 @@ export class PostController {
   @TypedRoute.Get('getPosts')
   public async getPosts(
     @TypedQuery() query: GetPostPageDto,
-  ): Promise<IPaginationData<PostDataDto[]>> {
+  ): Promise<IPaginationData<PostPreviewDto[]>> {
     return this.postService.getPosts(query);
   }
 
