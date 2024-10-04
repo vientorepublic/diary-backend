@@ -23,6 +23,11 @@ export class PostController {
     return this.postService.getPublicPosts(query);
   }
 
+  @TypedRoute.Get('view')
+  public async getPost(@TypedQuery() query: GetPostDto) {
+    return this.postService.getPublicPost(query);
+  }
+
   @TypedRoute.Get('privatePosts')
   @UseGuards(AuthGuard)
   public async getPrivatePosts(
@@ -30,11 +35,6 @@ export class PostController {
     @TypedQuery() query: GetPostPageDto,
   ) {
     return this.postService.getPrivatePosts(req, query);
-  }
-
-  @TypedRoute.Get('view')
-  public async getPost(@TypedQuery() query: GetPostDto) {
-    return this.postService.getPublicPost(query);
   }
 
   @TypedRoute.Get('viewPrivate')
@@ -54,8 +54,4 @@ export class PostController {
   ): Promise<MessageDto> {
     return this.postService.savePost(req, dto);
   }
-
-  public async saveDraftPost() {}
-
-  public async loadDraftPost() {}
 }

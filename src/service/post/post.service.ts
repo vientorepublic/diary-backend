@@ -93,7 +93,7 @@ export class PostService {
     this.postRepository.save(data);
 
     return {
-      message: '저장 완료!',
+      message: '게시 완료!',
     };
   }
 
@@ -245,6 +245,4 @@ export class PostService {
       created_at: Number(post.created_at) || 0,
     };
   }
-
-  public async draftPost() {}
 }

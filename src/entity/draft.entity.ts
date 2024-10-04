@@ -11,15 +11,9 @@ export class DraftEntity {
   @Column({ type: 'varchar', length: 50 })
   title: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  preview: string;
-
   @Column({ type: 'text' })
   text: string;
 
-  @Column({ type: 'boolean', default: false })
-  public_post: boolean;
-
   @Column({ type: 'varchar' })
-  created_at: number;
+  modified_at: number;
 }
