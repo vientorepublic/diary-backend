@@ -104,7 +104,6 @@ export class PostService {
     const { page } = query;
 
     const posts = (await this.postRepository.find()).reverse();
-    if (!posts.length) throw new NotFoundException('등록된 게시글이 없습니다.');
 
     const data: PostPreviewDto[] = [];
     for (let i = 0; i < posts.length; i++) {
@@ -125,6 +124,8 @@ export class PostService {
         });
       }
     }
+
+    if (!data.length) throw new NotFoundException('등록된 게시글이 없습니다.');
 
     const pagination = paginator.paginateData(data, page, 6);
     return pagination;
@@ -153,7 +154,6 @@ export class PostService {
         },
       })
     ).reverse();
-    if (!posts.length) throw new NotFoundException('등록된 게시글이 없습니다.');
 
     const data: MyPostsDto[] = [];
     for (let i = 0; i < posts.length; i++) {
@@ -169,7 +169,7 @@ export class PostService {
     }
 
     if (!data.length) {
-      throw new NotFoundException('비공개 게시글이 없습니다.');
+      throw new NotFoundException('등록된 게시글이 없습니다.');
     }
 
     const pagination = paginator.paginateData(data, page, 6);

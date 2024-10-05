@@ -4,7 +4,9 @@ import { MessageDto } from 'src/dto/message.dto';
 import {
   GetPostDto,
   GetPostPageDto,
+  MyPostsDto,
   PostBodyDto,
+  PostDataDto,
   PostPreviewDto,
 } from 'src/dto/post.dto';
 import { AuthGuard } from 'src/guard/auth.guard';
@@ -24,7 +26,7 @@ export class PostController {
   }
 
   @TypedRoute.Get('view')
-  public async getPost(@TypedQuery() query: GetPostDto) {
+  public async getPost(@TypedQuery() query: GetPostDto): Promise<PostDataDto> {
     return this.postService.getPublicPost(query);
   }
 
@@ -33,7 +35,7 @@ export class PostController {
   public async getMyPosts(
     @Request() req: IRequest,
     @TypedQuery() query: GetPostPageDto,
-  ) {
+  ): Promise<IPaginationData<MyPostsDto[]>> {
     return this.postService.getMyPosts(req, query);
   }
 
@@ -42,7 +44,7 @@ export class PostController {
   public async getPrivatePost(
     @Request() req: IRequest,
     @TypedQuery() query: GetPostDto,
-  ) {
+  ): Promise<PostDataDto> {
     return this.postService.getPrivatePost(req, query);
   }
 
