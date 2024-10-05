@@ -129,11 +129,9 @@ export class DraftService {
       this.draftRepository.delete({
         user_id: user.user_id,
       });
-      return {
-        message: '초안이 삭제되었습니다.',
-      };
-    } else {
-      throw new NotFoundException('저장된 초안이 없습니다.');
     }
+    return {
+      message: '초안이 삭제되었습니다.',
+    };
   }
 }

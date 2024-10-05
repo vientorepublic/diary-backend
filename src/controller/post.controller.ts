@@ -54,4 +54,13 @@ export class PostController {
   ): Promise<MessageDto> {
     return this.postService.savePost(req, dto);
   }
+
+  @TypedRoute.Delete('removePost')
+  @UseGuards(AuthGuard)
+  public async removePost(
+    @Request() req: IRequest,
+    @TypedQuery() query: GetPostDto,
+  ): Promise<MessageDto> {
+    return this.postService.removePost(req, query);
+  }
 }

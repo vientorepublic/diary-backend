@@ -178,10 +178,9 @@ export class PostService {
 
   public async getPublicPost(query: GetPostDto): Promise<PostDataDto> {
     const { id } = query;
-    const postId = Number(id) || 0;
     const post = await this.postRepository.findOne({
       where: {
-        id: postId,
+        id,
       },
     });
     if (!post) {
@@ -213,10 +212,9 @@ export class PostService {
     query: GetPostDto,
   ): Promise<PostDataDto> {
     const { id } = query;
-    const postId = Number(id) || 0;
     const post = await this.postRepository.findOne({
       where: {
-        id: postId,
+        id,
       },
     });
     if (!post) {
@@ -243,6 +241,46 @@ export class PostService {
       author: post.user_id,
       profile_image: user.profile_image,
       created_at: Number(post.created_at) || 0,
+    };
+  }
+
+  public async removePost(
+    req: IRequest,
+    query: GetPostDto,
+  ): Promise<MessageDto> {
+    const { id } = query;
+
+    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const user = await this.userRepository.findOne({
+      where: {
+        user_id: decoded.user_id,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+    }
+
+    const post = await this.postRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!post) {
+      throw new NotFoundException('해당 게시글을 찾을 수 없습니다.');
+    }
+
+    if (post.user_id !== user.user_id) {
+      throw new UnauthorizedException(
+        '해당 게시글을 삭제할 수 있는 권한이 없습니다.',
+      );
+    }
+
+    this.postRepository.delete({
+      id,
+    });
+
+    return {
+      message: '게시글이 삭제 되었습니다.',
     };
   }
 }
