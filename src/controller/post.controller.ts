@@ -28,13 +28,13 @@ export class PostController {
     return this.postService.getPublicPost(query);
   }
 
-  @TypedRoute.Get('privatePosts')
+  @TypedRoute.Get('myPosts')
   @UseGuards(AuthGuard)
-  public async getPrivatePosts(
+  public async getMyPosts(
     @Request() req: IRequest,
     @TypedQuery() query: GetPostPageDto,
   ) {
-    return this.postService.getPrivatePosts(req, query);
+    return this.postService.getMyPosts(req, query);
   }
 
   @TypedRoute.Get('viewPrivate')

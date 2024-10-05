@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {
   GetPostDto,
   GetPostPageDto,
+  MyPostsDto,
   PostBodyDto,
   PostDataDto,
   PostPreviewDto,
@@ -129,10 +130,10 @@ export class PostService {
     return pagination;
   }
 
-  public async getPrivatePosts(
+  public async getMyPosts(
     req: IRequest,
     query: GetPostPageDto,
-  ): Promise<IPaginationData<PostPreviewDto[]>> {
+  ): Promise<IPaginationData<MyPostsDto[]>> {
     const { page } = query;
 
     const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
@@ -145,27 +146,26 @@ export class PostService {
       throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
     }
 
-    const posts = (await this.postRepository.find()).reverse();
+    const posts = (
+      await this.postRepository.find({
+        where: {
+          user_id: user.user_id,
+        },
+      })
+    ).reverse();
     if (!posts.length) throw new NotFoundException('등록된 게시글이 없습니다.');
 
-    const data: PostPreviewDto[] = [];
+    const data: MyPostsDto[] = [];
     for (let i = 0; i < posts.length; i++) {
-      if (!posts[i].public_post && posts[i].user_id === user.user_id) {
-        const publisher = await this.userRepository.findOne({
-          where: {
-            user_id: posts[i].user_id,
-          },
-        });
-        const profileImage = publisher ? publisher.profile_image : '';
-        data.push({
-          id: posts[i].id,
-          title: posts[i].title,
-          preview: posts[i].preview,
-          author: posts[i].user_id,
-          profile_image: profileImage,
-          created_at: Number(posts[i].created_at) || 0,
-        });
-      }
+      data.push({
+        id: posts[i].id,
+        title: posts[i].title,
+        preview: posts[i].preview,
+        author: posts[i].user_id,
+        public_post: posts[i].public_post,
+        profile_image: user.profile_image,
+        created_at: Number(posts[i].created_at) || 0,
+      });
     }
 
     if (!data.length) {

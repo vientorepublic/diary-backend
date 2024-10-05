@@ -25,6 +25,11 @@ export class PostPreviewDto extends PostDto {
   preview: string;
 }
 
+export class MyPostsDto extends PostDto {
+  public_post: boolean;
+  preview: string;
+}
+
 export class PostDataDto extends PostDto {
   text: string;
 }
