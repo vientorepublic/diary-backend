@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  EditPostDto,
   GetPostDto,
   GetPostPageDto,
   MyPostsDto,
@@ -241,6 +242,75 @@ export class PostService {
       author: post.user_id,
       profile_image: user.profile_image,
       created_at: Number(post.created_at) || 0,
+    };
+  }
+
+  public async editPost(req: IRequest, dto: EditPostDto): Promise<MessageDto> {
+    const { id, title, text, public_post, g_recaptcha_response } = dto;
+    const ip = (req.headers['x-forwarded-for'] ??
+      req.socket.remoteAddress) as string;
+
+    const verify = await reCaptcha.verify(g_recaptcha_response, ip);
+    if (!verify.success) {
+      throw new ForbiddenException('reCAPTCHA 토큰 검증에 실패했습니다.');
+    }
+
+    const decode = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const user = await this.userRepository.findOne({
+      where: {
+        user_id: decode.user_id,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+    }
+
+    const post = await this.postRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!post) {
+      throw new NotFoundException('해당 게시글을 찾을 수 없습니다.');
+    }
+
+    if (post.user_id !== user.user_id) {
+      throw new UnauthorizedException(
+        '해당 게시글에 접근할 수 있는 권한이 없습니다.',
+      );
+    }
+
+    const trimTitle = title.trim();
+    const trimText = text.trim();
+
+    if (!trimTitle || !trimText) {
+      throw new BadRequestException('제목 또는 본문이 비어있습니다.');
+    }
+
+    if (trimTitle.length > 50) {
+      throw new BadRequestException(
+        '게시글 제목은 50바이트를 초과할 수 없습니다.',
+      );
+    }
+
+    if (trimText.length > 5000) {
+      throw new BadRequestException(
+        '게시글 본문은 5000바이트를 초과할 수 없습니다.',
+      );
+    }
+
+    const isPublicPost = public_post ? true : false;
+    const preview = text.substring(0, 100);
+
+    post.title = trimTitle;
+    post.text = trimText;
+    post.preview = preview;
+    post.public_post = isPublicPost;
+
+    this.postRepository.save(post);
+
+    return {
+      message: '게시글이 수정되었습니다.',
     };
   }
 

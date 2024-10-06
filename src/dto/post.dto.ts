@@ -6,6 +6,13 @@ export class PostBodyDto extends RecaptchaDto {
   public_post?: string;
 }
 
+export class EditPostDto extends RecaptchaDto {
+  id: number;
+  title: string;
+  text: string;
+  public_post?: string;
+}
+
 export class DraftBodyDto {
   title: string;
   text: string;

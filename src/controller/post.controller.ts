@@ -2,6 +2,7 @@ import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller, Request, UseGuards } from '@nestjs/common';
 import { MessageDto } from 'src/dto/message.dto';
 import {
+  EditPostDto,
   GetPostDto,
   GetPostPageDto,
   MyPostsDto,
@@ -55,6 +56,15 @@ export class PostController {
     @TypedBody() dto: PostBodyDto,
   ): Promise<MessageDto> {
     return this.postService.savePost(req, dto);
+  }
+
+  @TypedRoute.Patch('editPost')
+  @UseGuards(AuthGuard)
+  public async editPost(
+    @Request() req: IRequest,
+    @TypedBody() dto: EditPostDto,
+  ): Promise<MessageDto> {
+    return this.postService.editPost(req, dto);
   }
 
   @TypedRoute.Delete('removePost')
