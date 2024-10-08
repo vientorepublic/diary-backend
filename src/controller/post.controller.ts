@@ -58,7 +58,7 @@ export class PostController {
     return this.postService.savePost(req, dto);
   }
 
-  @TypedRoute.Patch('editPost')
+  @TypedRoute.Patch('edit')
   @UseGuards(AuthGuard)
   public async editPost(
     @Request() req: IRequest,
@@ -67,7 +67,7 @@ export class PostController {
     return this.postService.editPost(req, dto);
   }
 
-  @TypedRoute.Delete('removePost')
+  @TypedRoute.Delete('remove')
   @UseGuards(AuthGuard)
   public async removePost(
     @Request() req: IRequest,
