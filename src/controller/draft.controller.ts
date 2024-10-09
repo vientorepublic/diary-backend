@@ -25,7 +25,6 @@ export class DraftController {
   }
 
   @TypedRoute.Delete('removeDraft')
-  @UseGuards(AuthGuard)
   public async removeDraft(@Request() req: IRequest) {
     return this.draftService.removeDraft(req);
   }
