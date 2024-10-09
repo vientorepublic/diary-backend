@@ -1,5 +1,5 @@
-import { FastifyRequest } from 'fastify';
+import { Request } from 'express';
 
-export interface IRequest extends FastifyRequest {
+export interface IRequest extends Request {
   token: string;
 }
