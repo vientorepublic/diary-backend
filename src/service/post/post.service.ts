@@ -122,9 +122,7 @@ export class PostService {
           author: posts[i].user_id,
           profile_image: profileImage,
           created_at: Number(posts[i].created_at),
-          edited_at: posts[i].edited_at
-            ? Number(posts[i].edited_at)
-            : undefined,
+          edited_at: Number(posts[i].edited_at),
         });
       }
     }
@@ -169,7 +167,7 @@ export class PostService {
         public_post: posts[i].public_post,
         profile_image: user.profile_image,
         created_at: Number(posts[i].created_at),
-        edited_at: posts[i].edited_at ? Number(posts[i].edited_at) : undefined,
+        edited_at: Number(posts[i].edited_at),
       });
     }
 
@@ -209,7 +207,7 @@ export class PostService {
       author: post.user_id,
       profile_image: profileImage,
       created_at: Number(post.created_at),
-      edited_at: post.edited_at ? Number(post.edited_at) : undefined,
+      edited_at: Number(post.edited_at),
     };
   }
 
@@ -247,7 +245,7 @@ export class PostService {
       author: post.user_id,
       profile_image: user.profile_image,
       created_at: Number(post.created_at),
-      edited_at: post.edited_at ? Number(post.edited_at) : undefined,
+      edited_at: Number(post.edited_at),
     };
   }
 
