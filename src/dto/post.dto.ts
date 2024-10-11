@@ -26,6 +26,7 @@ export class PostDto {
   author: string;
   profile_image: string;
   created_at: number;
+  edited_at?: number;
 }
 
 export class PostPreviewDto extends PostDto {

@@ -121,7 +121,10 @@ export class PostService {
           preview: posts[i].preview,
           author: posts[i].user_id,
           profile_image: profileImage,
-          created_at: Number(posts[i].created_at) || 0,
+          created_at: Number(posts[i].created_at),
+          edited_at: posts[i].edited_at
+            ? Number(posts[i].edited_at)
+            : undefined,
         });
       }
     }
@@ -165,7 +168,8 @@ export class PostService {
         author: posts[i].user_id,
         public_post: posts[i].public_post,
         profile_image: user.profile_image,
-        created_at: Number(posts[i].created_at) || 0,
+        created_at: Number(posts[i].created_at),
+        edited_at: posts[i].edited_at ? Number(posts[i].edited_at) : undefined,
       });
     }
 
@@ -204,7 +208,8 @@ export class PostService {
       text: post.text,
       author: post.user_id,
       profile_image: profileImage,
-      created_at: Number(post.created_at) || 0,
+      created_at: Number(post.created_at),
+      edited_at: post.edited_at ? Number(post.edited_at) : undefined,
     };
   }
 
@@ -241,7 +246,8 @@ export class PostService {
       text: post.text,
       author: post.user_id,
       profile_image: user.profile_image,
-      created_at: Number(post.created_at) || 0,
+      created_at: Number(post.created_at),
+      edited_at: post.edited_at ? Number(post.edited_at) : undefined,
     };
   }
 
@@ -249,6 +255,7 @@ export class PostService {
     const { id, title, text, public_post, g_recaptcha_response } = dto;
     const ip = (req.headers['x-forwarded-for'] ??
       req.socket.remoteAddress) as string;
+    const now = dayjs().valueOf();
 
     const verify = await reCaptcha.verify(g_recaptcha_response, ip);
     if (!verify.success) {
@@ -306,6 +313,7 @@ export class PostService {
     post.text = trimText;
     post.preview = preview;
     post.public_post = isPublicPost;
+    post.edited_at = now;
 
     this.postRepository.save(post);
 
