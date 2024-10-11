@@ -22,4 +22,7 @@ export class PostEntity {
 
   @Column({ type: 'varchar' })
   created_at: number;
+
+  @Column({ type: 'varchar', default: '0' })
+  edited_at?: number;
 }
