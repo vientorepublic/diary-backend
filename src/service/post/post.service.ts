@@ -26,9 +26,11 @@ import { MessageDto } from 'src/dto/message.dto';
 import { Pagination } from 'src/library/pagination';
 import { IPaginationData } from 'src/types/pagination';
 import * as dayjs from 'dayjs';
+import { Utility } from 'src/library';
 
 const reCaptcha = new Recaptcha();
 const paginator = new Pagination();
+const utility = new Utility();
 
 @Injectable()
 export class PostService {
@@ -64,20 +66,8 @@ export class PostService {
     const trimTitle = title.trim();
     const trimText = text.trim();
 
-    if (!trimTitle || !trimText) {
-      throw new BadRequestException('제목 또는 본문이 비어있습니다.');
-    }
-
-    if (trimTitle.length > 50) {
-      throw new BadRequestException(
-        '게시글 제목은 50바이트를 초과할 수 없습니다.',
-      );
-    }
-
-    if (trimText.length > 5000) {
-      throw new BadRequestException(
-        '게시글 본문은 5000바이트를 초과할 수 없습니다.',
-      );
+    if (!utility.isValidPost(trimTitle, trimText)) {
+      throw new BadRequestException('게시글 형식이 잘못되었습니다.');
     }
 
     const isPublicPost = public_post ? true : false;
@@ -288,20 +278,8 @@ export class PostService {
     const trimTitle = title.trim();
     const trimText = text.trim();
 
-    if (!trimTitle || !trimText) {
-      throw new BadRequestException('제목 또는 본문이 비어있습니다.');
-    }
-
-    if (trimTitle.length > 50) {
-      throw new BadRequestException(
-        '게시글 제목은 50바이트를 초과할 수 없습니다.',
-      );
-    }
-
-    if (trimText.length > 5000) {
-      throw new BadRequestException(
-        '게시글 본문은 5000바이트를 초과할 수 없습니다.',
-      );
+    if (!utility.isValidPost(trimTitle, trimText)) {
+      throw new BadRequestException('게시글 형식이 잘못되었습니다.');
     }
 
     const isPublicPost = public_post ? true : false;
