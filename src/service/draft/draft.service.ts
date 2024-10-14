@@ -49,23 +49,23 @@ export class DraftService {
     const trimTitle = title.trim();
     const trimText = text.trim();
 
+    if (!trimTitle || !trimText) {
+      throw new BadRequestException('제목 또는 본문이 비어있습니다.');
+    }
+
+    if (trimTitle.length > 50) {
+      throw new BadRequestException(
+        '게시글 제목은 50바이트를 초과할 수 없습니다.',
+      );
+    }
+
+    if (trimText.length > 5000) {
+      throw new BadRequestException(
+        '게시글 본문은 5000바이트를 초과할 수 없습니다.',
+      );
+    }
+
     if (!draft) {
-      if (!trimTitle || !trimText) {
-        throw new BadRequestException('제목 또는 본문이 비어있습니다.');
-      }
-
-      if (trimTitle.length > 50) {
-        throw new BadRequestException(
-          '게시글 제목은 50바이트를 초과할 수 없습니다.',
-        );
-      }
-
-      if (trimText.length > 5000) {
-        throw new BadRequestException(
-          '게시글 본문은 5000바이트를 초과할 수 없습니다.',
-        );
-      }
-
       const data = this.draftRepository.create({
         title: trimTitle,
         text: trimText,
