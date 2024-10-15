@@ -25,8 +25,8 @@ import { Recaptcha } from '../../library/recaptcha';
 import { MessageDto } from 'src/dto/message.dto';
 import { Pagination } from 'src/library/pagination';
 import { IPaginationData } from 'src/types/pagination';
-import * as dayjs from 'dayjs';
 import { Utility } from 'src/library';
+import * as dayjs from 'dayjs';
 
 const reCaptcha = new Recaptcha();
 const paginator = new Pagination();

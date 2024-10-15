@@ -11,7 +11,8 @@ export class Utility {
       text.length > maxTextLength
     ) {
       return false;
+    } else {
+      return true;
     }
-    return true;
   }
 }
