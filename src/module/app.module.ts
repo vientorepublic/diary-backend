@@ -7,17 +7,12 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PostModule } from './post.module';
 import { DraftModule } from './draft.module';
+import { JwtOptions } from 'src/constant';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeormConfig),
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: {
-        expiresIn: '12h',
-      },
-    }),
+    JwtModule.register(JwtOptions),
     MainModule,
     AuthModule,
     UserModule,
