@@ -1,4 +1,4 @@
-import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
+import { TypedBody, TypedRoute } from '@nestia/core';
 import { Controller, Request } from '@nestjs/common';
 import {
   IdentifierDto,
@@ -41,12 +41,5 @@ export class AuthController {
     @TypedBody() dto: IdentifierDto,
   ): Promise<MessageDto> {
     return this.verifyService.processVerify(dto);
-  }
-
-  @TypedRoute.Get('verify/validate')
-  public async validateIdentifier(
-    @TypedQuery() query: IdentifierDto,
-  ): Promise<MessageDto> {
-    return this.verifyService.validateIdentifier(query);
   }
 }
