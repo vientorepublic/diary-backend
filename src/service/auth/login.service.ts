@@ -63,6 +63,12 @@ export class LoginService {
       );
     }
 
+    if (!user.verified) {
+      throw new UnauthorizedException(
+        '계정이 아직 활성화 되지 않았습니다. 이메일을 확인해주세요.',
+      );
+    }
+
     const payload: JwtPayload = {
       user_id: user.user_id,
       sub: user.id,
