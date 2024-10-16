@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PostModule } from './post.module';
 import { DraftModule } from './draft.module';
 import { JwtOptions } from 'src/constant';
+import { CronModule } from './cron.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { JwtOptions } from 'src/constant';
     UserModule,
     PostModule,
     DraftModule,
+    CronModule,
   ],
   controllers: [],
   providers: [],
