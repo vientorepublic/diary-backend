@@ -18,3 +18,7 @@ export class IssueTokenResponse extends MessageDto {
     expires_at: number;
   };
 }
+
+export class IdentifierDto {
+  identifier: string;
+}

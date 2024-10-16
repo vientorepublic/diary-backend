@@ -9,6 +9,12 @@ declare global {
       RECAPTCHA_SECRET: string;
       FRONTEND_HOST: string;
       JWT_SECRET: string;
+      SMTP_HOST: string;
+      SMTP_PORT: string;
+      SMTP_SECURE: string;
+      SMTP_USER: string;
+      SMTP_PASS: string;
+      SMTP_SENDER_NAME: string;
     }
   }
 }
