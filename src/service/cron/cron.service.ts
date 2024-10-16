@@ -20,7 +20,8 @@ export class CronService {
     const users = await this.userRepository.find();
     for (let i = 0; i < users.length; i++) {
       const { user_id, verified, verify_expiresAt } = users[i];
-      if (!verified && verify_expiresAt && verify_expiresAt < now) {
+      const expiresAt = Number(verify_expiresAt);
+      if (!verified && expiresAt && expiresAt < now) {
         this.userRepository.delete({ user_id });
         this.logger.log(`Cleanup job - Delete unverified account: ${user_id}`);
       }
