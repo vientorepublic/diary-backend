@@ -77,7 +77,7 @@ export class RegisterService {
 
     const salt = await genSalt(10);
     const encryptedPassword = await hash(passphrase, salt);
-    const avatar = gravatar.getGravatarUrl(email);
+    const avatar = gravatar.get(email);
     const expiresAt = now + expiresIn;
     const expiresDate = dayjs(expiresAt).format('YYYY-MM-DD HH:mm:ss');
     const identifier = uuidV4();

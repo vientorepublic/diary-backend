@@ -43,18 +43,18 @@ export class DraftService {
       throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
     }
 
-    const draft = await this.draftRepository.findOne({
-      where: {
-        user_id: decoded.user_id,
-      },
-    });
-
     const trimTitle = title.trim();
     const trimText = text.trim();
 
     if (!utility.isValidPost(trimTitle, trimText)) {
       throw new BadRequestException('게시글 형식이 잘못되었습니다.');
     }
+
+    const draft = await this.draftRepository.findOne({
+      where: {
+        user_id: decoded.user_id,
+      },
+    });
 
     if (!draft) {
       const data = this.draftRepository.create({

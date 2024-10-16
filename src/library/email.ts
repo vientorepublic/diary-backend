@@ -1,5 +1,6 @@
 import { IEmailLocale, IEmailParams } from 'src/types/email';
 import { Transporter, createTransport } from 'nodemailer';
+import { Options } from 'nodemailer/lib/mailer';
 import { Logger } from '@nestjs/common';
 import { decode } from 'html-entities';
 import { compile } from 'handlebars';
@@ -10,7 +11,6 @@ export class Email {
   public address: string;
   public transporter: Transporter;
   private logger = new Logger('EMAIL');
-
   constructor(address: string) {
     this.address = address;
     this.transporter = createTransport({
@@ -23,7 +23,6 @@ export class Email {
       },
     });
   }
-
   public async send(
     params: IEmailParams,
     replacements: IEmailLocale,
@@ -35,7 +34,7 @@ export class Email {
       },
     );
     const html = compile(template);
-    const options = {
+    const options: Options = {
       from: `${process.env.SMTP_SENDER_NAME} <${process.env.SMTP_USER}>`,
       to: this.address,
       subject: decode(params.subject),

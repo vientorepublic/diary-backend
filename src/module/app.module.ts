@@ -21,7 +21,5 @@ import { CronModule } from './cron.module';
     DraftModule,
     CronModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
