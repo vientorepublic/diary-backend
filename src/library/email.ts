@@ -41,15 +41,13 @@ export class Email {
       subject: decode(params.subject),
       html: html(replacements),
     };
-    this.transporter
-      .sendMail(options)
-      .then((res) => {
-        this.logger.log(
-          `${res.accepted}, ${res.rejected} - ${res.response}, [message-id: ${res.messageId}]`,
-        );
-      })
-      .catch((err) => {
-        this.logger.error(err);
-      });
+    try {
+      const result = await this.transporter.sendMail(options);
+      this.logger.log(
+        `${result.accepted}, ${result.rejected} - ${result.response}, [message-id: ${result.messageId}]`,
+      );
+    } catch (err) {
+      this.logger.error(err);
+    }
   }
 }
