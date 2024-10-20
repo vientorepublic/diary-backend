@@ -28,6 +28,8 @@ import { IPaginationData } from 'src/types/pagination';
 import { Utility } from 'src/library';
 import * as dayjs from 'dayjs';
 
+const pageSize = 6;
+
 const reCaptcha = new Recaptcha();
 const paginator = new Pagination();
 const utility = new Utility();
@@ -119,7 +121,7 @@ export class PostService {
 
     if (!data.length) throw new NotFoundException('등록된 게시글이 없습니다.');
 
-    const pagination = paginator.paginateData(data, page, 6);
+    const pagination = paginator.paginateData(data, page, pageSize);
     return pagination;
   }
 
@@ -165,7 +167,7 @@ export class PostService {
       throw new NotFoundException('등록된 게시글이 없습니다.');
     }
 
-    const pagination = paginator.paginateData(data, page, 6);
+    const pagination = paginator.paginateData(data, page, pageSize);
     return pagination;
   }
 
@@ -271,7 +273,7 @@ export class PostService {
 
     if (post.user_id !== user.user_id) {
       throw new UnauthorizedException(
-        '해당 게시글에 접근할 수 있는 권한이 없습니다.',
+        '해당 게시글을 수정할 수 있는 권한이 없습니다.',
       );
     }
 
