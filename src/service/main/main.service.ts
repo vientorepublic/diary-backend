@@ -1,4 +1,4 @@
-import { MessageDto } from 'src/dto/message.dto';
+import type { MessageDto } from 'src/dto/message.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

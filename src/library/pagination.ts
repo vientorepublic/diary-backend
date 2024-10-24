@@ -1,4 +1,4 @@
-import { IPaginationData, IPaginationInfo } from '../types/pagination';
+import type { IPaginationData, IPaginationInfo } from '../types/pagination';
 
 export class Pagination {
   public paginateData<T>(

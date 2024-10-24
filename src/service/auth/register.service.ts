@@ -3,15 +3,15 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
+import type { RegisterBodyDto } from 'src/dto/auth.dto';
+import type { MessageDto } from 'src/dto/message.dto';
+import type { IRequest } from '../../types/headers';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RegisterBodyDto } from 'src/dto/auth.dto';
 import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
-import { IRequest } from '../../types/headers';
 import { Regex } from 'src/library/regex';
 import { Gravatar } from 'src/library/gravatar';
 import { UserEntity } from 'src/entity/user.entity';
-import { MessageDto } from 'src/dto/message.dto';
 import { Recaptcha } from 'src/library/recaptcha';
 import { Email } from 'src/library/email';
 import { v4 as uuidV4 } from 'uuid';

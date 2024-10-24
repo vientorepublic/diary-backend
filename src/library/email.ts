@@ -1,4 +1,4 @@
-import { IEmailLocale, IEmailParams } from 'src/types/email';
+import type { IEmailLocale, IEmailParams } from 'src/types/email';
 import { Transporter, createTransport } from 'nodemailer';
 import { Options } from 'nodemailer/lib/mailer';
 import { Logger } from '@nestjs/common';
