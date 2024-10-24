@@ -1,8 +1,8 @@
+import type { UserInfoDto, UserQueryParams } from 'src/dto/user.dto';
+import type { IRequest } from 'src/types/headers';
 import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { AccountService } from 'src/service/user/account.service';
 import { AuthGuard } from 'src/guard/auth.guard';
-import { IRequest } from 'src/types/headers';
-import { UserInfoDto, UserQueryParams } from 'src/dto/user.dto';
 import { TypedQuery, TypedRoute } from '@nestia/core';
 
 @Controller('auth/user')

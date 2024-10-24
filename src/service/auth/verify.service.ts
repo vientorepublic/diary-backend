@@ -3,10 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import type { MessageDto } from 'src/dto/message.dto';
+import type { IdentifierDto } from 'src/dto/auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MessageDto } from 'src/dto/message.dto';
 import { UserEntity } from 'src/entity/user.entity';
-import { IdentifierDto } from 'src/dto/auth.dto';
 import { Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 

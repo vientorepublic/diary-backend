@@ -1,5 +1,5 @@
+import type { ICaptchaData, ICaptchaResponse } from 'src/types/captcha';
 import axios from 'axios';
-import { ICaptchaData, ICaptchaResponse } from 'src/types/captcha';
 
 const secretKey = process.env.RECAPTCHA_SECRET;
 

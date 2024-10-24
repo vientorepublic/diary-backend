@@ -1,10 +1,10 @@
+import type { MyInfoDto, UserInfoDto, UserQueryParams } from 'src/dto/user.dto';
+import type { JwtDecodedPayload } from 'src/types/auth';
+import type { IRequest } from 'src/types/headers';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MyInfoDto, UserInfoDto, UserQueryParams } from 'src/dto/user.dto';
 import { UserEntity } from 'src/entity/user.entity';
-import { JwtDecodedPayload } from 'src/types/auth';
-import { IRequest } from 'src/types/headers';
 import { Repository } from 'typeorm';
 
 @Injectable()

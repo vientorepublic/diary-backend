@@ -1,7 +1,7 @@
 import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller, Request, UseGuards } from '@nestjs/common';
 import { MessageDto } from 'src/dto/message.dto';
-import {
+import type {
   EditPostDto,
   GetPostDto,
   GetPostPageDto,
@@ -10,10 +10,10 @@ import {
   PostDataDto,
   PostPreviewDto,
 } from 'src/dto/post.dto';
+import type { IPaginationData } from 'src/types/pagination';
+import type { IRequest } from 'src/types/headers';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { PostService } from 'src/service/post/post.service';
-import { IRequest } from 'src/types/headers';
-import { IPaginationData } from 'src/types/pagination';
 
 @Controller('post')
 export class PostController {

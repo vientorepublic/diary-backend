@@ -9,8 +9,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { compare } from 'bcrypt';
 import { Repository } from 'typeorm';
 import { Regex } from 'src/library/regex';
-import { IRequest } from 'src/types/headers';
-import { IQueryParams, JwtPayload } from 'src/types/auth';
+import type { IRequest } from 'src/types/headers';
+import type { IQueryParams, JwtPayload } from 'src/types/auth';
 import { UserEntity } from 'src/entity/user.entity';
 import { Recaptcha } from 'src/library/recaptcha';
 
