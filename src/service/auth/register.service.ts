@@ -21,8 +21,7 @@ const regex = new Regex();
 const gravatar = new Gravatar();
 const reCaptcha = new Recaptcha();
 
-// 24h
-const expiresIn = 86400000;
+const expiresIn = 86400000; // 24h
 
 @Injectable()
 export class RegisterService {
@@ -66,12 +65,12 @@ export class RegisterService {
       throw new BadRequestException('해당 아이디는 이미 사용중입니다.');
     }
 
-    const isEmailExists = await this.userRepository.findOne({
+    const emailQuery = await this.userRepository.findOne({
       where: {
         email,
       },
     });
-    if (isEmailExists) {
+    if (emailQuery) {
       throw new BadRequestException('해당 이메일 주소는 이미 사용중입니다.');
     }
 

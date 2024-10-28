@@ -10,13 +10,13 @@ export class Recaptcha {
       params.append('secret', secretKey);
       params.append('response', token);
       params.append('remoteip', ip);
-      const res = await axios.get<ICaptchaResponse>(
+      const { data } = await axios.get<ICaptchaResponse>(
         'https://www.google.com/recaptcha/api/siteverify',
         { params },
       );
       return {
-        success: res.data.success,
-        challenge_ts: res.data.challenge_ts,
+        success: data.success,
+        challenge_ts: data.challenge_ts,
       };
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {

@@ -13,6 +13,7 @@ import type { IRequest } from 'src/types/headers';
 import type { IQueryParams, JwtPayload } from 'src/types/auth';
 import { UserEntity } from 'src/entity/user.entity';
 import { Recaptcha } from 'src/library/recaptcha';
+import * as dayjs from 'dayjs';
 
 const period = Number(process.env.JWT_PERIOD) || 43200000;
 const reCaptcha = new Recaptcha();
@@ -33,6 +34,7 @@ export class LoginService {
     const { user_id, passphrase, g_recaptcha_response } = dto;
     const ip = (req.headers['x-forwarded-for'] ??
       req.socket.remoteAddress) as string;
+    const now = dayjs().valueOf();
 
     const verify = await reCaptcha.verify(g_recaptcha_response, ip);
     if (!verify.success) {
@@ -74,7 +76,7 @@ export class LoginService {
       sub: user.id,
     };
     const accessToken = await this.jwtService.signAsync(payload);
-    const expiresAt = new Date().getTime() + period;
+    const expiresAt = now + period;
     return {
       message: `환영합니다, ${user.user_id}님!`,
       data: {

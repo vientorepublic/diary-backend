@@ -29,6 +29,7 @@ import { Utility } from 'src/library';
 import * as dayjs from 'dayjs';
 
 const pageSize = 6;
+const previewLength = 100;
 
 const reCaptcha = new Recaptcha();
 const paginator = new Pagination();
@@ -72,15 +73,14 @@ export class PostService {
       throw new BadRequestException('게시글 형식이 잘못되었습니다.');
     }
 
-    const isPublicPost = public_post ? true : false;
-    const preview = text.substring(0, 100);
+    const preview = text.substring(0, previewLength);
 
     const data = this.postRepository.create({
       title: trimTitle,
       text: trimText,
       preview,
+      public_post,
       user_id: user.user_id,
-      public_post: isPublicPost,
       created_at: now,
     });
 
@@ -191,13 +191,15 @@ export class PostService {
         user_id: post.user_id,
       },
     });
-    const profileImage = publisher ? publisher.profile_image : '';
+    if (!publisher) {
+      throw new NotFoundException('해당 게시글의 사용자를 찾을 수 없습니다.');
+    }
     return {
       id: post.id,
       title: post.title,
       text: post.text,
       author: post.user_id,
-      profile_image: profileImage,
+      profile_image: publisher.profile_image,
       created_at: Number(post.created_at),
       edited_at: Number(post.edited_at),
     };
@@ -284,13 +286,12 @@ export class PostService {
       throw new BadRequestException('게시글 형식이 잘못되었습니다.');
     }
 
-    const isPublicPost = public_post ? true : false;
-    const preview = text.substring(0, 100);
+    const preview = text.substring(0, previewLength);
 
     post.title = trimTitle;
     post.text = trimText;
     post.preview = preview;
-    post.public_post = isPublicPost;
+    post.public_post = public_post;
     post.edited_at = now;
 
     this.postRepository.save(post);
