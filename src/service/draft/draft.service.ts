@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DraftEntity } from 'src/entity/draft.entity';
 import { UserEntity } from 'src/entity/user.entity';
+import { Korean } from 'src/constant/locale';
 import { Utility } from 'src/library';
 import { Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
@@ -40,14 +41,14 @@ export class DraftService {
       },
     });
     if (!user) {
-      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.USER_NOT_FOUND);
     }
 
     const trimTitle = title.trim();
     const trimText = text.trim();
 
     if (!utility.isValidPost(trimTitle, trimText)) {
-      throw new BadRequestException('게시글 형식이 잘못되었습니다.');
+      throw new BadRequestException(Korean.INVALID_POST_FORMAT);
     }
 
     const draft = await this.draftRepository.findOne({
@@ -71,7 +72,7 @@ export class DraftService {
     }
 
     return {
-      message: '초안이 저장되었습니다.',
+      message: Korean.DRAFT_SAVED,
     };
   }
 
@@ -83,7 +84,7 @@ export class DraftService {
       },
     });
     if (!user) {
-      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.USER_NOT_FOUND);
     }
     const draft = await this.draftRepository.findOne({
       where: {
@@ -96,7 +97,7 @@ export class DraftService {
         text: draft.text,
       };
     } else {
-      throw new NotFoundException('저장된 초안이 없습니다.');
+      throw new NotFoundException(Korean.NO_SAVED_DRAFT);
     }
   }
 
@@ -108,7 +109,7 @@ export class DraftService {
       },
     });
     if (!user) {
-      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.USER_NOT_FOUND);
     }
     const draft = await this.draftRepository.findOne({
       where: {
@@ -121,7 +122,7 @@ export class DraftService {
       });
     }
     return {
-      message: '초안이 삭제되었습니다.',
+      message: Korean.DRAFT_DELETED,
     };
   }
 }

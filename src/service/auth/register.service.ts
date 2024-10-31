@@ -13,6 +13,7 @@ import { Regex } from 'src/library/regex';
 import { Gravatar } from 'src/library/gravatar';
 import { UserEntity } from 'src/entity/user.entity';
 import { Recaptcha } from 'src/library/recaptcha';
+import { Brand, Korean, VerifyEmailLocale } from 'src/constant/locale';
 import { Email } from 'src/library/email';
 import { v4 as uuidV4 } from 'uuid';
 import * as dayjs from 'dayjs';
@@ -41,19 +42,19 @@ export class RegisterService {
 
     const verify = await reCaptcha.verify(g_recaptcha_response, ip);
     if (!verify.success) {
-      throw new ForbiddenException('reCAPTCHA 토큰 검증에 실패했습니다.');
+      throw new ForbiddenException(Korean.RECAPTCHA_VERIFICATION_FAILED);
     }
 
     if (!regex.isUserId(user_id)) {
-      throw new BadRequestException('아이디 형식이 일치하지 않습니다.');
+      throw new BadRequestException(Korean.INVALID_ID_FORMAT);
     }
 
     if (!regex.isEmail(email)) {
-      throw new BadRequestException('이메일 주소 형식이 일치하지 않습니다.');
+      throw new BadRequestException(Korean.INVALID_EMAIL_FORMAT);
     }
 
     if (!regex.isPassword(passphrase)) {
-      throw new BadRequestException('비밀번호 형식이 일치하지 않습니다.');
+      throw new BadRequestException(Korean.INVALID_PASSWORD_FORMAT);
     }
 
     const isUserIdExists = await this.userRepository.findOne({
@@ -62,7 +63,7 @@ export class RegisterService {
       },
     });
     if (isUserIdExists) {
-      throw new BadRequestException('해당 아이디는 이미 사용중입니다.');
+      throw new BadRequestException(Korean.ID_ALREADY_IN_USE);
     }
 
     const emailQuery = await this.userRepository.findOne({
@@ -71,7 +72,7 @@ export class RegisterService {
       },
     });
     if (emailQuery) {
-      throw new BadRequestException('해당 이메일 주소는 이미 사용중입니다.');
+      throw new BadRequestException(Korean.EMAIL_ALREADY_IN_USE);
     }
 
     const salt = await genSalt(10);
@@ -93,22 +94,21 @@ export class RegisterService {
 
     new Email(email).send(
       {
-        subject: '[글귀저장소] 계정 이메일 인증',
+        subject: VerifyEmailLocale.SUBJECT,
       },
       {
-        brand: '글귀저장소',
-        title: '계정 이메일 인증',
-        username: `안녕하세요, ${user_id}님.`,
-        text_1: '이메일 인증을 완료하려면 아래 링크를 열어주세요.',
+        brand: Brand,
+        title: VerifyEmailLocale.TITLE,
+        username: VerifyEmailLocale.USERNAME.replace('{user}', user_id),
+        text_1: VerifyEmailLocale.TEXT_01,
         link: `${process.env.FRONTEND_HOST}/auth/verify?identifier=${identifier}`,
-        text_2: '이메일 인증을 요청하지 않으셨다면, 본 이메일을 무시해 주세요.',
-        text_3: `인증 링크는 한국 표준시 기준 ${expiresDate}에 만료됩니다.`,
+        text_2: VerifyEmailLocale.TEXT_02,
+        text_3: VerifyEmailLocale.TEXT_03.replace('{date}', expiresDate),
       },
     );
 
     return {
-      message:
-        '가입이 완료되었습니다. 계정 활성화를 위해 이메일을 확인해주세요.',
+      message: Korean.ACCOUNT_REGISTERED,
     };
   }
 }

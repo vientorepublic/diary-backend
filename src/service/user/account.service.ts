@@ -5,6 +5,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entity/user.entity';
+import { Korean } from 'src/constant/locale';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -50,7 +51,7 @@ export class AccountService {
         permission: user.permission,
       };
     } else {
-      throw new NotFoundException('해당 사용자를 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.USER_NOT_FOUND);
     }
   }
 }
