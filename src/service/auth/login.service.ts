@@ -13,6 +13,7 @@ import type { IRequest } from 'src/types/headers';
 import type { IQueryParams, JwtPayload } from 'src/types/auth';
 import { UserEntity } from 'src/entity/user.entity';
 import { Recaptcha } from 'src/library/recaptcha';
+import { Korean } from 'src/constant/locale';
 import * as dayjs from 'dayjs';
 
 const period = Number(process.env.JWT_PERIOD) || 43200000;
@@ -38,7 +39,7 @@ export class LoginService {
 
     const verify = await reCaptcha.verify(g_recaptcha_response, ip);
     if (!verify.success) {
-      throw new ForbiddenException('reCAPTCHA 토큰 검증에 실패했습니다.');
+      throw new ForbiddenException(Korean.RECAPTCHA_VERIFICATION_FAILED);
     }
 
     const query: IQueryParams = {};
@@ -53,22 +54,16 @@ export class LoginService {
     });
 
     if (!user) {
-      throw new UnauthorizedException(
-        '아이디 또는 비밀번호가 일치하지 않습니다.',
-      );
+      throw new UnauthorizedException(Korean.ID_OR_PASSWORD_MISMATCH);
     }
 
     const comparePassword = await compare(passphrase, user.passphrase);
     if (!comparePassword) {
-      throw new UnauthorizedException(
-        '아이디 또는 비밀번호가 일치하지 않습니다.',
-      );
+      throw new UnauthorizedException(Korean.ID_OR_PASSWORD_MISMATCH);
     }
 
     if (!user.verified) {
-      throw new UnauthorizedException(
-        '계정이 아직 활성화 되지 않았습니다. 이메일을 확인해주세요.',
-      );
+      throw new UnauthorizedException(Korean.ACCOUNT_NOT_ACTIVATED);
     }
 
     const payload: JwtPayload = {
@@ -78,7 +73,7 @@ export class LoginService {
     const accessToken = await this.jwtService.signAsync(payload);
     const expiresAt = now + period;
     return {
-      message: `환영합니다, ${user.user_id}님!`,
+      message: Korean.WELCOME_USER.replace('{user}', user.user_id),
       data: {
         access_token: accessToken,
         expires_at: expiresAt,

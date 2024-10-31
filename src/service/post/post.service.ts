@@ -25,6 +25,7 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Recaptcha } from '../../library/recaptcha';
 import { Pagination } from 'src/library/pagination';
+import { Korean } from 'src/constant/locale';
 import { Utility } from 'src/library';
 import * as dayjs from 'dayjs';
 
@@ -53,7 +54,7 @@ export class PostService {
 
     const verify = await reCaptcha.verify(g_recaptcha_response, ip);
     if (!verify.success) {
-      throw new ForbiddenException('reCAPTCHA 토큰 검증에 실패했습니다.');
+      throw new ForbiddenException(Korean.RECAPTCHA_VERIFICATION_FAILED);
     }
 
     const decode = this.jwtService.decode<JwtDecodedPayload>(req.token);
@@ -63,14 +64,14 @@ export class PostService {
       },
     });
     if (!user) {
-      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.USER_DATA_NOT_FOUND);
     }
 
     const trimTitle = title.trim();
     const trimText = text.trim();
 
     if (!utility.isValidPost(trimTitle, trimText)) {
-      throw new BadRequestException('게시글 형식이 잘못되었습니다.');
+      throw new BadRequestException(Korean.INVALID_POST_FORMAT);
     }
 
     const preview = text.substring(0, previewLength);
@@ -87,7 +88,7 @@ export class PostService {
     this.postRepository.save(data);
 
     return {
-      message: '게시 완료!',
+      message: Korean.POST_PUBLISHED,
     };
   }
 
@@ -119,7 +120,7 @@ export class PostService {
       }
     }
 
-    if (!data.length) throw new NotFoundException('등록된 게시글이 없습니다.');
+    if (!data.length) throw new NotFoundException(Korean.NO_PUBLISHED_POSTS);
 
     const pagination = paginator.paginateData(data, page, pageSize);
     return pagination;
@@ -138,7 +139,7 @@ export class PostService {
       },
     });
     if (!user) {
-      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.USER_DATA_NOT_FOUND);
     }
 
     const posts = (
@@ -164,7 +165,7 @@ export class PostService {
     }
 
     if (!data.length) {
-      throw new NotFoundException('등록된 게시글이 없습니다.');
+      throw new NotFoundException(Korean.NO_PUBLISHED_POSTS);
     }
 
     const pagination = paginator.paginateData(data, page, pageSize);
@@ -179,12 +180,10 @@ export class PostService {
       },
     });
     if (!post) {
-      throw new NotFoundException('해당 게시글을 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.POST_NOT_FOUND);
     }
     if (!post.public_post) {
-      throw new UnauthorizedException(
-        '해당 게시글에 접근할 수 있는 권한이 없습니다.',
-      );
+      throw new UnauthorizedException(Korean.NO_POST_READ_PERMISSION);
     }
     const publisher = await this.userRepository.findOne({
       where: {
@@ -192,7 +191,7 @@ export class PostService {
       },
     });
     if (!publisher) {
-      throw new NotFoundException('해당 게시글의 사용자를 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.POST_PUBLISHER_NOT_FOUND);
     }
     return {
       id: post.id,
@@ -216,7 +215,7 @@ export class PostService {
       },
     });
     if (!post) {
-      throw new NotFoundException('해당 게시글을 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.POST_NOT_FOUND);
     }
     const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
@@ -225,12 +224,10 @@ export class PostService {
       },
     });
     if (!user) {
-      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.USER_DATA_NOT_FOUND);
     }
     if (post.user_id !== user.user_id) {
-      throw new UnauthorizedException(
-        '해당 게시글에 접근할 수 있는 권한이 없습니다.',
-      );
+      throw new UnauthorizedException(Korean.NO_POST_READ_PERMISSION);
     }
     return {
       id: post.id,
@@ -251,7 +248,7 @@ export class PostService {
 
     const verify = await reCaptcha.verify(g_recaptcha_response, ip);
     if (!verify.success) {
-      throw new ForbiddenException('reCAPTCHA 토큰 검증에 실패했습니다.');
+      throw new ForbiddenException(Korean.RECAPTCHA_VERIFICATION_FAILED);
     }
 
     const decode = this.jwtService.decode<JwtDecodedPayload>(req.token);
@@ -261,7 +258,7 @@ export class PostService {
       },
     });
     if (!user) {
-      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.USER_DATA_NOT_FOUND);
     }
 
     const post = await this.postRepository.findOne({
@@ -270,20 +267,18 @@ export class PostService {
       },
     });
     if (!post) {
-      throw new NotFoundException('해당 게시글을 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.POST_NOT_FOUND);
     }
 
     if (post.user_id !== user.user_id) {
-      throw new UnauthorizedException(
-        '해당 게시글을 수정할 수 있는 권한이 없습니다.',
-      );
+      throw new UnauthorizedException(Korean.NO_POST_EDIT_PERMISSION);
     }
 
     const trimTitle = title.trim();
     const trimText = text.trim();
 
     if (!utility.isValidPost(trimTitle, trimText)) {
-      throw new BadRequestException('게시글 형식이 잘못되었습니다.');
+      throw new BadRequestException(Korean.INVALID_POST_FORMAT);
     }
 
     const preview = text.substring(0, previewLength);
@@ -297,7 +292,7 @@ export class PostService {
     this.postRepository.save(post);
 
     return {
-      message: '게시글이 수정되었습니다.',
+      message: Korean.POST_EDITED,
     };
   }
 
@@ -314,7 +309,7 @@ export class PostService {
       },
     });
     if (!user) {
-      throw new NotFoundException('사용자 정보를 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.USER_DATA_NOT_FOUND);
     }
 
     const post = await this.postRepository.findOne({
@@ -323,13 +318,11 @@ export class PostService {
       },
     });
     if (!post) {
-      throw new NotFoundException('해당 게시글을 찾을 수 없습니다.');
+      throw new NotFoundException(Korean.POST_NOT_FOUND);
     }
 
     if (post.user_id !== user.user_id) {
-      throw new UnauthorizedException(
-        '해당 게시글을 삭제할 수 있는 권한이 없습니다.',
-      );
+      throw new UnauthorizedException(Korean.NO_POST_DELETE_PERMISSION);
     }
 
     this.postRepository.delete({
@@ -337,7 +330,7 @@ export class PostService {
     });
 
     return {
-      message: '게시글이 삭제 되었습니다.',
+      message: Korean.POST_DELETED,
     };
   }
 }
