@@ -29,7 +29,7 @@ export class SearchService {
     // Create SQL Query
     const sqlQuery = await this.postRepository
       .createQueryBuilder('posts')
-      .where(`posts.${type} LIKE :prefix`, { prefix: `${query}%` })
+      .where(`posts.${type} LIKE :prefix`, { prefix: `%${query}%` })
       .getMany();
     // Filtering posts
     for (let i = 0; i < sqlQuery.length; i++) {
