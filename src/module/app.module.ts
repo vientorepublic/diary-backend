@@ -9,6 +9,7 @@ import { PostModule } from './post.module';
 import { DraftModule } from './draft.module';
 import { JwtOptions } from 'src/constant';
 import { CronModule } from './cron.module';
+import { SearchModule } from './search.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CronModule } from './cron.module';
     AuthModule,
     UserModule,
     PostModule,
+    SearchModule,
     DraftModule,
     CronModule,
   ],
