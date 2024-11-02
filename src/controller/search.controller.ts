@@ -1,9 +1,9 @@
 import { TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller } from '@nestjs/common';
+import { PostPreviewDto } from 'src/dto/post.dto';
 import { SearchQueryDto } from 'src/dto/search.dto';
 import { SearchService } from 'src/service/search/search.service';
 import { IPaginationData } from 'src/types/pagination';
-import { IPostPreview } from '../../../diary/src/app/types';
 
 @Controller('search')
 export class SearchController {
@@ -12,7 +12,7 @@ export class SearchController {
   @TypedRoute.Get()
   public async searchPost(
     @TypedQuery() query: SearchQueryDto,
-  ): Promise<IPaginationData<IPostPreview[]>> {
+  ): Promise<IPaginationData<PostPreviewDto[]>> {
     return this.searchService.searchPost(query);
   }
 }
