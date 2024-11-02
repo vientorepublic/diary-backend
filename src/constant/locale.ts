@@ -28,6 +28,7 @@ export enum Korean {
   ID_ALREADY_IN_USE = '해당 아이디는 이미 사용중입니다.',
   EMAIL_ALREADY_IN_USE = '해당 이메일 주소는 이미 사용중입니다.',
   ACCOUNT_REGISTERED = '가입이 완료되었습니다. 계정 활성화를 위해 이메일을 확인해주세요.',
+  NO_SEARCH_RESULT = '검색 결과가 없습니다.',
 }
 
 export enum VerifyEmailLocale {

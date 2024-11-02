@@ -5,7 +5,7 @@
 [![forks - diary-backend](https://img.shields.io/github/forks/vientorepublic/diary-backend?style=social)](https://github.com/vientorepublic/diary-backend)
 [![Nodejs CI](https://github.com/vientorepublic/diary-backend/actions/workflows/nodejs.yml/badge.svg)](https://github.com/vientorepublic/diary-backend/actions/workflows/nodejs.yml)
 
-[글귀저장소](https://github.com/vientorepublic/diary-backend)의 백엔드 서버 구현체입니다.
+[글귀저장소](https://github.com/vientorepublic/diary)의 백엔드 서버 구현체입니다.
 
 # Requirements
 
