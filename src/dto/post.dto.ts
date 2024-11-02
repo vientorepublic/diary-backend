@@ -42,8 +42,11 @@ export class PostDataDto extends PostDto {
   text: string;
 }
 
+export type SortOptions = 'latest' | 'oldest';
+
 export class GetPostPageDto {
   page: number;
+  sort: SortOptions;
 }
 
 export class GetPostDto {

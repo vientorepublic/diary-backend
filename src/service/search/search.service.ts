@@ -24,14 +24,12 @@ export class SearchService {
   public async searchPost(
     dto: SearchQueryDto,
   ): Promise<IPaginationData<PostPreviewDto[]>> {
-    const { type, page, query } = dto;
+    const { type, page, sort, query } = dto;
     const data: PostPreviewDto[] = [];
-    // Create SQL Query
     const sqlQuery = await this.postRepository
       .createQueryBuilder('posts')
       .where(`posts.${type} LIKE :prefix`, { prefix: `%${query}%` })
       .getMany();
-    // Filtering posts
     for (let i = 0; i < sqlQuery.length; i++) {
       if (sqlQuery[i].public_post) {
         const publisher = await this.userRepository.findOne({
@@ -51,13 +49,17 @@ export class SearchService {
         });
       }
     }
-    // Check data length
     if (!data.length) {
       throw new NotFoundException(Korean.NO_SEARCH_RESULT);
     }
-    // Data pagination
-    const pagination = paginator.paginateData(data, page, pageSize);
-    return pagination;
+    if (sort === 'latest') {
+      const reverseArray = data.reverse();
+      const pagination = paginator.paginateData(reverseArray, page, pageSize);
+      return pagination;
+    } else {
+      const pagination = paginator.paginateData(data, page, pageSize);
+      return pagination;
+    }
   }
 
   public async searchUser() {}

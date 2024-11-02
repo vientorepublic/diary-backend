@@ -95,9 +95,9 @@ export class PostService {
   public async getPublicPosts(
     query: GetPostPageDto,
   ): Promise<IPaginationData<PostPreviewDto[]>> {
-    const { page } = query;
+    const { page, sort } = query;
 
-    const posts = (await this.postRepository.find()).reverse();
+    const posts = await this.postRepository.find();
 
     const data: PostPreviewDto[] = [];
     for (let i = 0; i < posts.length; i++) {
@@ -122,15 +122,21 @@ export class PostService {
 
     if (!data.length) throw new NotFoundException(Korean.NO_PUBLISHED_POSTS);
 
-    const pagination = paginator.paginateData(data, page, pageSize);
-    return pagination;
+    if (sort === 'latest') {
+      const reverseArray = data.reverse();
+      const pagination = paginator.paginateData(reverseArray, page, pageSize);
+      return pagination;
+    } else {
+      const pagination = paginator.paginateData(data, page, pageSize);
+      return pagination;
+    }
   }
 
   public async getMyPosts(
     req: IRequest,
     query: GetPostPageDto,
   ): Promise<IPaginationData<MyPostsDto[]>> {
-    const { page } = query;
+    const { page, sort } = query;
 
     const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
@@ -142,13 +148,11 @@ export class PostService {
       throw new NotFoundException(Korean.USER_DATA_NOT_FOUND);
     }
 
-    const posts = (
-      await this.postRepository.find({
-        where: {
-          user_id: user.user_id,
-        },
-      })
-    ).reverse();
+    const posts = await this.postRepository.find({
+      where: {
+        user_id: user.user_id,
+      },
+    });
 
     const data: MyPostsDto[] = [];
     for (let i = 0; i < posts.length; i++) {
@@ -168,8 +172,14 @@ export class PostService {
       throw new NotFoundException(Korean.NO_PUBLISHED_POSTS);
     }
 
-    const pagination = paginator.paginateData(data, page, pageSize);
-    return pagination;
+    if (sort === 'latest') {
+      const reverseArray = data.reverse();
+      const pagination = paginator.paginateData(reverseArray, page, pageSize);
+      return pagination;
+    } else {
+      const pagination = paginator.paginateData(data, page, pageSize);
+      return pagination;
+    }
   }
 
   public async getPublicPost(query: GetPostDto): Promise<PostDataDto> {
