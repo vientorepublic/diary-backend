@@ -28,7 +28,7 @@ export class SearchService {
     const data: PostPreviewDto[] = [];
     const sqlQuery = await this.postRepository
       .createQueryBuilder('posts')
-      .where(`posts.${type} LIKE :prefix`, { prefix: `%${query}%` })
+      .where(`${type} LIKE :prefix`, { prefix: `%${query}%` })
       .getMany();
     for (let i = 0; i < sqlQuery.length; i++) {
       if (sqlQuery[i].public_post) {

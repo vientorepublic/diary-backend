@@ -53,9 +53,8 @@ export class AccountService {
       });
       const latestPost = await this.postRepository
         .createQueryBuilder('posts')
-        .where('posts.user_id = :user', { user: id })
-        .where('posts.public_post = 1')
-        .orderBy('posts.id', 'DESC')
+        .where('user_id = :user AND public_post = 1', { user: id })
+        .orderBy('id', 'DESC')
         .getOne();
       let lastActivityDate = 0;
       if (latestPost) {
