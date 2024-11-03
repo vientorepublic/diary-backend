@@ -29,6 +29,7 @@ export class SearchService {
     const sqlQuery = await this.postRepository
       .createQueryBuilder('posts')
       .where(`${type} LIKE :prefix`, { prefix: `%${query}%` })
+      .orderBy('id', sort === 'latest' ? 'DESC' : 'ASC')
       .getMany();
     for (let i = 0; i < sqlQuery.length; i++) {
       if (sqlQuery[i].public_post) {
@@ -52,13 +53,7 @@ export class SearchService {
     if (!data.length) {
       throw new NotFoundException(Korean.NO_SEARCH_RESULT);
     }
-    if (sort === 'latest') {
-      const reverseArray = data.reverse();
-      const pagination = paginator.paginateData(reverseArray, page, pageSize);
-      return pagination;
-    } else {
-      const pagination = paginator.paginateData(data, page, pageSize);
-      return pagination;
-    }
+    const pagination = paginator.paginateData(data, page, pageSize);
+    return pagination;
   }
 }

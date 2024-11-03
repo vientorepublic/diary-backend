@@ -97,7 +97,11 @@ export class PostService {
   ): Promise<IPaginationData<PostPreviewDto[]>> {
     const { page, sort } = query;
 
-    const posts = await this.postRepository.find();
+    const posts = await this.postRepository.find({
+      order: {
+        id: sort === 'latest' ? 'DESC' : 'ASC',
+      },
+    });
 
     const data: PostPreviewDto[] = [];
     for (let i = 0; i < posts.length; i++) {
@@ -122,14 +126,8 @@ export class PostService {
 
     if (!data.length) throw new NotFoundException(Korean.NO_PUBLISHED_POSTS);
 
-    if (sort === 'latest') {
-      const reverseArray = data.reverse();
-      const pagination = paginator.paginateData(reverseArray, page, pageSize);
-      return pagination;
-    } else {
-      const pagination = paginator.paginateData(data, page, pageSize);
-      return pagination;
-    }
+    const pagination = paginator.paginateData(data, page, pageSize);
+    return pagination;
   }
 
   public async getMyPosts(
@@ -152,6 +150,9 @@ export class PostService {
       where: {
         user_id: user.user_id,
       },
+      order: {
+        id: sort === 'latest' ? 'DESC' : 'ASC',
+      },
     });
 
     const data: MyPostsDto[] = [];
@@ -172,14 +173,8 @@ export class PostService {
       throw new NotFoundException(Korean.NO_PUBLISHED_POSTS);
     }
 
-    if (sort === 'latest') {
-      const reverseArray = data.reverse();
-      const pagination = paginator.paginateData(reverseArray, page, pageSize);
-      return pagination;
-    } else {
-      const pagination = paginator.paginateData(data, page, pageSize);
-      return pagination;
-    }
+    const pagination = paginator.paginateData(data, page, pageSize);
+    return pagination;
   }
 
   public async getPublicPost(query: GetPostDto): Promise<PostDataDto> {
