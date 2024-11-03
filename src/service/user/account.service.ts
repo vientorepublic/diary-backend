@@ -5,6 +5,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entity/user.entity';
+import { PostEntity } from 'src/entity/post.entity';
 import { Korean } from 'src/constant/locale';
 import { Repository } from 'typeorm';
 
@@ -12,7 +13,9 @@ import { Repository } from 'typeorm';
 export class AccountService {
   constructor(
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(PostEntity)
+    private readonly postRepository: Repository<PostEntity>,
     private jwtService: JwtService,
   ) {}
 
@@ -44,11 +47,31 @@ export class AccountService {
       },
     });
     if (user) {
+      const postCount = await this.postRepository.countBy({
+        user_id: id,
+        public_post: true,
+      });
+      const latestPost = await this.postRepository
+        .createQueryBuilder('posts')
+        .where('user_id = :user AND public_post = 1', { user: id })
+        .orderBy('id', 'DESC')
+        .getOne();
+      let lastActivityDate = 0;
+      if (latestPost) {
+        const createdAt = Number(latestPost.created_at);
+        const editedAt = Number(latestPost.edited_at);
+        if (editedAt) lastActivityDate = editedAt;
+        else lastActivityDate = createdAt;
+      }
       return {
         id: user.id,
         user_id: user.user_id,
         profile_image: user.profile_image,
         permission: user.permission,
+        stats: {
+          postCount,
+          lastActivityDate,
+        },
       };
     } else {
       throw new NotFoundException(Korean.USER_NOT_FOUND);

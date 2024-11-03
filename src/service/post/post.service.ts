@@ -95,9 +95,13 @@ export class PostService {
   public async getPublicPosts(
     query: GetPostPageDto,
   ): Promise<IPaginationData<PostPreviewDto[]>> {
-    const { page } = query;
+    const { page, sort } = query;
 
-    const posts = (await this.postRepository.find()).reverse();
+    const posts = await this.postRepository.find({
+      order: {
+        id: sort === 'latest' ? 'DESC' : 'ASC',
+      },
+    });
 
     const data: PostPreviewDto[] = [];
     for (let i = 0; i < posts.length; i++) {
@@ -130,7 +134,7 @@ export class PostService {
     req: IRequest,
     query: GetPostPageDto,
   ): Promise<IPaginationData<MyPostsDto[]>> {
-    const { page } = query;
+    const { page, sort } = query;
 
     const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
@@ -142,13 +146,14 @@ export class PostService {
       throw new NotFoundException(Korean.USER_DATA_NOT_FOUND);
     }
 
-    const posts = (
-      await this.postRepository.find({
-        where: {
-          user_id: user.user_id,
-        },
-      })
-    ).reverse();
+    const posts = await this.postRepository.find({
+      where: {
+        user_id: user.user_id,
+      },
+      order: {
+        id: sort === 'latest' ? 'DESC' : 'ASC',
+      },
+    });
 
     const data: MyPostsDto[] = [];
     for (let i = 0; i < posts.length; i++) {
