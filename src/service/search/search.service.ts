@@ -61,6 +61,4 @@ export class SearchService {
       return pagination;
     }
   }
-
-  public async searchUser() {}
 }
