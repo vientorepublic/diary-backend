@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Korean } from 'src/constant/locale';
-import { PostPreviewDto } from 'src/dto/post.dto';
+import { IPaginationData } from 'src/types/pagination';
 import { SearchQueryDto } from 'src/dto/search.dto';
 import { PostEntity } from 'src/entity/post.entity';
 import { UserEntity } from 'src/entity/user.entity';
 import { Pagination } from 'src/library/pagination';
-import { IPaginationData } from 'src/types/pagination';
+import { InjectRepository } from '@nestjs/typeorm';
+import { PostPreviewDto } from 'src/dto/post.dto';
+import { Korean } from 'src/constant/locale';
 import { Repository } from 'typeorm';
 
 const pageSize = 6;

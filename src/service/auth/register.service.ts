@@ -3,18 +3,18 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
+import { BrandName, Korean, VerifyEmailLocale } from 'src/constant/locale';
 import type { RegisterBodyDto } from 'src/dto/auth.dto';
 import type { MessageDto } from 'src/dto/message.dto';
 import type { IRequest } from '../../types/headers';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { genSalt, hash } from 'bcrypt';
-import { Regex } from 'src/library/regex';
-import { Gravatar } from 'src/library/gravatar';
 import { UserEntity } from 'src/entity/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Recaptcha } from 'src/library/recaptcha';
-import { BrandName, Korean, VerifyEmailLocale } from 'src/constant/locale';
+import { Gravatar } from 'src/library/gravatar';
+import { Regex } from 'src/library/regex';
 import { Email } from 'src/library/email';
+import { genSalt, hash } from 'bcrypt';
+import { Repository } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 import * as dayjs from 'dayjs';
 

@@ -11,9 +11,9 @@ import type {
   PostPreviewDto,
 } from 'src/dto/post.dto';
 import type { IPaginationData } from 'src/types/pagination';
+import { PostService } from 'src/service/post/post.service';
 import type { IRequest } from 'src/types/headers';
 import { AuthGuard } from 'src/guard/auth.guard';
-import { PostService } from 'src/service/post/post.service';
 
 @Controller('post')
 export class PostController {

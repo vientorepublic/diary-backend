@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
-import type { MessageDto } from 'src/dto/message.dto';
 import { MainService } from 'src/service/main/main.service';
+import type { MessageDto } from 'src/dto/message.dto';
+import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class MainController {
