@@ -1,4 +1,4 @@
-export const Brand = '글귀저장소';
+export const BrandName = '글귀저장소';
 
 export enum Korean {
   USER_NOT_FOUND = '해당 사용자를 찾을 수 없습니다.',
@@ -19,7 +19,6 @@ export enum Korean {
   NO_SAVED_DRAFT = '저장된 초안이 없습니다.',
   DRAFT_DELETED = '초안이 삭제되었습니다.',
   VERIFY_LINK_EXPIRED = '인증 링크가 만료되었습니다.',
-  ACCOUNT_NOT_ACTIVATED = '계정이 아직 활성화 되지 않았습니다. 이메일을 확인해주세요.',
   WELCOME_USER = '환영합니다, {user}님!',
   ACCOUNT_ACTIVATED = '계정 활성화가 완료되었습니다.',
   INVALID_ID_FORMAT = '아이디 형식이 일치하지 않습니다.',
@@ -27,12 +26,12 @@ export enum Korean {
   INVALID_PASSWORD_FORMAT = '비밀번호 형식이 일치하지 않습니다.',
   ID_ALREADY_IN_USE = '해당 아이디는 이미 사용중입니다.',
   EMAIL_ALREADY_IN_USE = '해당 이메일 주소는 이미 사용중입니다.',
-  ACCOUNT_REGISTERED = '가입이 완료되었습니다. 계정 활성화를 위해 이메일을 확인해주세요.',
+  ACCOUNT_REGISTERED = '가입이 완료되었습니다.',
   NO_SEARCH_RESULT = '검색 결과가 없습니다.',
 }
 
 export enum VerifyEmailLocale {
-  SUBJECT = `[${Brand}] 계정 이메일 인증`,
+  SUBJECT = `[${BrandName}] 계정 이메일 인증`,
   TITLE = '계정 이메일 인증',
   USERNAME = '안녕하세요, {user}님.',
   TEXT_01 = '이메일 인증을 완료하려면 아래 링크를 열어주세요.',

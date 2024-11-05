@@ -53,7 +53,8 @@ export class AccountService {
       });
       const latestPost = await this.postRepository
         .createQueryBuilder('posts')
-        .where('user_id = :user AND public_post = 1', { user: id })
+        .where('user_id = :user', { user: id })
+        .andWhere('public_post = 1')
         .orderBy('id', 'DESC')
         .getOne();
       let lastActivityDate = 0;
@@ -66,6 +67,7 @@ export class AccountService {
       return {
         id: user.id,
         user_id: user.user_id,
+        verified: user.verified,
         profile_image: user.profile_image,
         permission: user.permission,
         stats: {

@@ -8,6 +8,7 @@ export class UserInfoDto {
   user_id: string;
   profile_image: string;
   permission: number;
+  verified?: boolean;
   stats?: IUserStats;
 }
 

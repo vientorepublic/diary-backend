@@ -13,7 +13,7 @@ import { Regex } from 'src/library/regex';
 import { Gravatar } from 'src/library/gravatar';
 import { UserEntity } from 'src/entity/user.entity';
 import { Recaptcha } from 'src/library/recaptcha';
-import { Brand, Korean, VerifyEmailLocale } from 'src/constant/locale';
+import { BrandName, Korean, VerifyEmailLocale } from 'src/constant/locale';
 import { Email } from 'src/library/email';
 import { v4 as uuidV4 } from 'uuid';
 import * as dayjs from 'dayjs';
@@ -97,7 +97,7 @@ export class RegisterService {
         subject: VerifyEmailLocale.SUBJECT,
       },
       {
-        brand: Brand,
+        brand: BrandName,
         title: VerifyEmailLocale.TITLE,
         username: VerifyEmailLocale.USERNAME.replace('{user}', user_id),
         text_1: VerifyEmailLocale.TEXT_01,

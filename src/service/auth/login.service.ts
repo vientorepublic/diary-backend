@@ -62,10 +62,6 @@ export class LoginService {
       throw new UnauthorizedException(Korean.ID_OR_PASSWORD_MISMATCH);
     }
 
-    if (!user.verified) {
-      throw new UnauthorizedException(Korean.ACCOUNT_NOT_ACTIVATED);
-    }
-
     const payload: JwtPayload = {
       user_id: user.user_id,
       sub: user.id,
