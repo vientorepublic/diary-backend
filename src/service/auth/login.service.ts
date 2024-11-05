@@ -28,7 +28,7 @@ export class LoginService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  public async issueToken(
+  public async createJWT(
     req: IRequest,
     dto: LoginBodyDto,
   ): Promise<IssueTokenResponse> {

@@ -1,16 +1,16 @@
+import { RegisterService } from 'src/service/auth/register.service';
+import { VerifyService } from 'src/service/auth/verify.service';
+import { LoginService } from 'src/service/auth/login.service';
+import type { MessageDto } from 'src/dto/message.dto';
 import { TypedBody, TypedRoute } from '@nestia/core';
 import { Controller, Request } from '@nestjs/common';
+import type { IRequest } from 'src/types/headers';
 import type {
   IdentifierDto,
   IssueTokenResponse,
   LoginBodyDto,
   RegisterBodyDto,
 } from 'src/dto/auth.dto';
-import type { MessageDto } from 'src/dto/message.dto';
-import type { IRequest } from 'src/types/headers';
-import { LoginService } from 'src/service/auth/login.service';
-import { RegisterService } from 'src/service/auth/register.service';
-import { VerifyService } from 'src/service/auth/verify.service';
 
 @Controller('auth')
 export class AuthController {
@@ -25,7 +25,7 @@ export class AuthController {
     @Request() req: IRequest,
     @TypedBody() dto: LoginBodyDto,
   ): Promise<IssueTokenResponse> {
-    return this.loginService.issueToken(req, dto);
+    return this.loginService.createJWT(req, dto);
   }
 
   @TypedRoute.Post('register')

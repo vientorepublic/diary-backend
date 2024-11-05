@@ -1,8 +1,8 @@
 import 'dotenv/config';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './module/app.module';
-import { normalizePort } from './library/normalize_port';
 import type { NestExpressApplication } from '@nestjs/platform-express';
+import { normalizePort } from './library/normalize_port';
+import { AppModule } from './module/app.module';
+import { NestFactory } from '@nestjs/core';
 
 const port = normalizePort(process.env.PORT);
 
