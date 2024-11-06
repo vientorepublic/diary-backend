@@ -3,20 +3,20 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { IssueTokenResponse, LoginBodyDto } from 'src/dto/auth.dto';
-import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { compare } from 'bcrypt';
-import { Repository } from 'typeorm';
-import { Regex } from 'src/library/regex';
-import type { IRequest } from 'src/types/headers';
+import type { IssueTokenResponse, LoginBodyDto } from 'src/dto/auth.dto';
 import type { IQueryParams, JwtPayload } from 'src/types/auth';
 import { UserEntity } from 'src/entity/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import type { IRequest } from 'src/types/headers';
 import { Recaptcha } from 'src/library/recaptcha';
 import { Korean } from 'src/constant/locale';
+import { JwtExpiresIn } from 'src/constant';
+import { Regex } from 'src/library/regex';
+import { JwtService } from '@nestjs/jwt';
+import { Repository } from 'typeorm';
+import { compare } from 'bcrypt';
 import * as dayjs from 'dayjs';
 
-const period = Number(process.env.JWT_PERIOD) || 43200000;
 const reCaptcha = new Recaptcha();
 const regex = new Regex();
 
@@ -67,7 +67,7 @@ export class LoginService {
       sub: user.id,
     };
     const accessToken = await this.jwtService.signAsync(payload);
-    const expiresAt = now + period;
+    const expiresAt = now + JwtExpiresIn;
     return {
       message: Korean.WELCOME_USER.replace('{user}', user.user_id),
       data: {

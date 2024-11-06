@@ -18,13 +18,16 @@ export class CronService {
 
   @Cron(CronExpression.EVERY_HOUR)
   public async cleanup() {
-    // Delete Unverified & Expired Accounts
     const now = dayjs().valueOf();
-    const users = await this.userRepository.find();
+    const users = await this.userRepository.find({
+      where: {
+        verified: false,
+      },
+    });
     for (let i = 0; i < users.length; i++) {
-      const { user_id, verified, verify_expiresAt } = users[i];
+      const { user_id, verify_expiresAt } = users[i];
       const expiresAt = Number(verify_expiresAt);
-      if (!verified && expiresAt && expiresAt < now) {
+      if (expiresAt && expiresAt < now) {
         this.userRepository.delete({ user_id });
         this.postRepository.delete({ user_id });
         this.logger.log(`Cleanup job - Delete unverified account: ${user_id}`);
