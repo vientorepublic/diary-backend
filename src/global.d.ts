@@ -9,6 +9,7 @@ declare global {
       RECAPTCHA_SECRET: string;
       FRONTEND_HOST: string;
       JWT_SECRET: string;
+      JWT_PERIOD: string;
       SMTP_HOST: string;
       SMTP_PORT: string;
       SMTP_SECURE: string;
