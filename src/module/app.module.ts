@@ -1,4 +1,5 @@
 import { typeormConfig } from 'src/database/database.provider';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SearchModule } from './search.module';
 import { DraftModule } from './draft.module';
@@ -15,6 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
   imports: [
     TypeOrmModule.forRoot(typeormConfig),
     JwtModule.register(JwtOptions),
+    ScheduleModule.forRoot(),
     MainModule,
     AuthModule,
     UserModule,
