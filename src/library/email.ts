@@ -1,6 +1,6 @@
 import type { IEmailLocale, IEmailParams } from 'src/types/email';
-import { Transporter, createTransport } from 'nodemailer';
-import { Options } from 'nodemailer/lib/mailer';
+import { type Transporter, createTransport } from 'nodemailer';
+import type { Options } from 'nodemailer/lib/mailer';
 import { Logger } from '@nestjs/common';
 import { decode } from 'html-entities';
 import { compile } from 'handlebars';

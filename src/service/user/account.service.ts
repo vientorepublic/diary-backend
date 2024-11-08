@@ -6,8 +6,8 @@ import { PostEntity } from 'src/entity/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { IRequest } from 'src/types/headers';
 import { Korean } from 'src/constant/locale';
+import type { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class AccountService {

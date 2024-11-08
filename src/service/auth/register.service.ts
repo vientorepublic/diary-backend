@@ -11,10 +11,10 @@ import { UserEntity } from 'src/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recaptcha } from 'src/library/recaptcha';
 import { Gravatar } from 'src/library/gravatar';
+import type { Repository } from 'typeorm';
 import { Regex } from 'src/library/regex';
 import { Email } from 'src/library/email';
 import { genSalt, hash } from 'bcrypt';
-import { Repository } from 'typeorm';
 import { v4 as uuidV4 } from 'uuid';
 import * as dayjs from 'dayjs';
 
