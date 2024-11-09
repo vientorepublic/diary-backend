@@ -11,9 +11,9 @@ import type { IRequest } from 'src/types/headers';
 import { Recaptcha } from 'src/library/recaptcha';
 import { Korean } from 'src/constant/locale';
 import { JwtExpiresIn } from 'src/constant';
+import type { Repository } from 'typeorm';
 import { Regex } from 'src/library/regex';
 import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
 import { compare } from 'bcrypt';
 import * as dayjs from 'dayjs';
 

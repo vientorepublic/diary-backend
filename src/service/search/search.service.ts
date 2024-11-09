@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { IPaginationData } from 'src/types/pagination';
-import { SearchQueryDto } from 'src/dto/search.dto';
+import type { IPaginationData } from 'src/types/pagination';
+import type { SearchQueryDto } from 'src/dto/search.dto';
 import { PostEntity } from 'src/entity/post.entity';
 import { UserEntity } from 'src/entity/user.entity';
 import { Pagination } from 'src/library/pagination';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostPreviewDto } from 'src/dto/post.dto';
 import { Korean } from 'src/constant/locale';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 const pageSize = 6;
 const paginator = new Pagination();
@@ -29,26 +29,25 @@ export class SearchService {
     const sqlQuery = await this.postRepository
       .createQueryBuilder('posts')
       .where(`${type} LIKE :prefix`, { prefix: `%${query}%` })
+      .andWhere('public_post = 1')
       .orderBy('id', sort === 'latest' ? 'DESC' : 'ASC')
       .getMany();
     for (let i = 0; i < sqlQuery.length; i++) {
-      if (sqlQuery[i].public_post) {
-        const publisher = await this.userRepository.findOne({
-          where: {
-            user_id: sqlQuery[i].user_id,
-          },
-        });
-        const profileImage = publisher ? publisher.profile_image : '';
-        data.push({
-          id: sqlQuery[i].id,
-          title: sqlQuery[i].title,
-          preview: sqlQuery[i].preview,
-          author: sqlQuery[i].user_id,
-          profile_image: profileImage,
-          created_at: Number(sqlQuery[i].created_at),
-          edited_at: Number(sqlQuery[i].edited_at),
-        });
-      }
+      const publisher = await this.userRepository.findOne({
+        where: {
+          user_id: sqlQuery[i].user_id,
+        },
+      });
+      const profileImage = publisher ? publisher.profile_image : '';
+      data.push({
+        id: sqlQuery[i].id,
+        title: sqlQuery[i].title,
+        preview: sqlQuery[i].preview,
+        author: sqlQuery[i].user_id,
+        profile_image: profileImage,
+        created_at: Number(sqlQuery[i].created_at),
+        edited_at: Number(sqlQuery[i].edited_at),
+      });
     }
     if (!data.length) {
       throw new NotFoundException(Korean.NO_SEARCH_RESULT);

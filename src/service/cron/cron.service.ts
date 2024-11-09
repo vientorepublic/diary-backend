@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserEntity } from 'src/entity/user.entity';
 import { PostEntity } from 'src/entity/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 
 @Injectable()

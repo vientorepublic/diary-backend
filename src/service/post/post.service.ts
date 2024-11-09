@@ -24,9 +24,9 @@ import { UserEntity } from 'src/entity/user.entity';
 import { Recaptcha } from '../../library/recaptcha';
 import { Pagination } from 'src/library/pagination';
 import { Korean } from 'src/constant/locale';
+import type { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Utility } from 'src/library';
-import { Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 
 const pageSize = 6;

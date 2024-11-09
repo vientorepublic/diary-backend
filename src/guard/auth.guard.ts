@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import type { IAuthorization } from 'src/types/auth';
 import type { IRequest } from 'src/types/headers';
-import { IAuthorization } from 'src/types/auth';
 import { JwtService } from '@nestjs/jwt';
 import typia from 'typia';
 

@@ -1,8 +1,8 @@
 import { SearchService } from 'src/service/search/search.service';
-import { IPaginationData } from 'src/types/pagination';
+import type { IPaginationData } from 'src/types/pagination';
+import type { SearchQueryDto } from 'src/dto/search.dto';
+import type { PostPreviewDto } from 'src/dto/post.dto';
 import { TypedQuery, TypedRoute } from '@nestia/core';
-import { SearchQueryDto } from 'src/dto/search.dto';
-import { PostPreviewDto } from 'src/dto/post.dto';
 import { Controller } from '@nestjs/common';
 
 @Controller('search')

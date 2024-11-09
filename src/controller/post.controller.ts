@@ -1,6 +1,6 @@
 import { TypedBody, TypedQuery, TypedRoute } from '@nestia/core';
 import { Controller, Request, UseGuards } from '@nestjs/common';
-import { MessageDto } from 'src/dto/message.dto';
+import type { MessageDto } from 'src/dto/message.dto';
 import type {
   EditPostDto,
   GetPostDto,

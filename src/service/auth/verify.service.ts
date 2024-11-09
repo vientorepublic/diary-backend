@@ -8,7 +8,7 @@ import type { IdentifierDto } from 'src/dto/auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entity/user.entity';
 import { Korean } from 'src/constant/locale';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 
 @Injectable()
