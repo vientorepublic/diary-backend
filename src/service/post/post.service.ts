@@ -29,7 +29,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Utility } from 'src/library';
 import * as dayjs from 'dayjs';
 
-const pageSize = 6;
+const pageSize = Number(process.env.PAGE_SIZE) || 6;
 const previewLength = 100;
 
 const reCaptcha = new Recaptcha();

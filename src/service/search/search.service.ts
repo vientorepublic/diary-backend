@@ -9,7 +9,7 @@ import { PostPreviewDto } from 'src/dto/post.dto';
 import { Korean } from 'src/constant/locale';
 import type { Repository } from 'typeorm';
 
-const pageSize = 6;
+const pageSize = Number(process.env.PAGE_SIZE) || 6;
 const paginator = new Pagination();
 
 @Injectable()

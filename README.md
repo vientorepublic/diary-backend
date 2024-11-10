@@ -80,9 +80,14 @@ SMTP_SECURE=
 SMTP_USER=
 SMTP_SENDER_NAME=
 SMTP_PASS=
+PAGE_SIZE=
 ```
 
 Generate JWT Secret: `openssl rand -hex 64`
+
+Default JWT expiresIn: `43200000`
+
+Default Page Size: `6`
 
 # Install Dependency
 

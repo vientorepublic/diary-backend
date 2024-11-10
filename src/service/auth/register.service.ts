@@ -19,7 +19,6 @@ import { v4 as uuidV4 } from 'uuid';
 import * as dayjs from 'dayjs';
 
 const regex = new Regex();
-const gravatar = new Gravatar();
 const reCaptcha = new Recaptcha();
 
 const expiresIn = 86400000; // 24h
@@ -77,7 +76,7 @@ export class RegisterService {
 
     const salt = await genSalt(10);
     const encryptedPassword = await hash(passphrase, salt);
-    const avatar = gravatar.get(email);
+    const avatar = new Gravatar(email).get();
     const expiresAt = now + expiresIn;
     const expiresDate = dayjs(expiresAt).format('YYYY-MM-DD HH:mm:ss');
     const identifier = uuidV4();
