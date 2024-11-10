@@ -10,6 +10,7 @@ declare global {
       FRONTEND_HOST: string;
       JWT_SECRET: string;
       JWT_PERIOD: string;
+      VERIFY_PERIOD: string;
       SMTP_HOST: string;
       SMTP_PORT: string;
       SMTP_SECURE: string;

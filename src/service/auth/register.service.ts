@@ -21,7 +21,7 @@ import * as dayjs from 'dayjs';
 const regex = new Regex();
 const reCaptcha = new Recaptcha();
 
-const expiresIn = 86400000; // 24h
+const expiresIn = Number(process.env.VERIFY_PERIOD) || 86400000;
 
 @Injectable()
 export class RegisterService {
