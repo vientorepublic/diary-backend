@@ -74,15 +74,23 @@ FRONTEND_HOST=
 RECAPTCHA_SECRET=
 JWT_SECRET=
 JWT_PERIOD=
+VERIFY_PERIOD=
 SMTP_HOST=
 SMTP_PORT=
 SMTP_SECURE=
 SMTP_USER=
 SMTP_SENDER_NAME=
 SMTP_PASS=
+PAGE_SIZE=
 ```
 
 Generate JWT Secret: `openssl rand -hex 64`
+
+Default JWT Period: `43200000` (12h)
+
+Default Verify Period: `86400000` (24h)
+
+Default Page Size: `6`
 
 # Install Dependency
 
