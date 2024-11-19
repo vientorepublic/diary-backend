@@ -28,8 +28,8 @@ export class SearchService {
     const data: PostPreviewDto[] = [];
     const sqlQuery = await this.postRepository
       .createQueryBuilder('posts')
-      .where(`${type} LIKE :prefix`, { prefix: `%${query}%` })
-      .andWhere('public_post = 1')
+      .where(':type LIKE :prefix', { type, prefix: `%${query}%` })
+      .andWhere('public_post = :public', { public: 1 })
       .orderBy('id', sort === 'latest' ? 'DESC' : 'ASC')
       .getMany();
     for (let i = 0; i < sqlQuery.length; i++) {
