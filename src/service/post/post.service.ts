@@ -135,11 +135,10 @@ export class PostService {
     query: GetPostPageDto,
   ): Promise<IPaginationData<MyPostsDto[]>> {
     const { page, sort } = query;
-
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {
@@ -222,10 +221,10 @@ export class PostService {
     if (!post) {
       throw new NotFoundException(Korean.POST_NOT_FOUND);
     }
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {
@@ -307,10 +306,10 @@ export class PostService {
   ): Promise<MessageDto> {
     const { id } = query;
 
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {

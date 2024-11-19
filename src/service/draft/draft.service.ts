@@ -34,10 +34,10 @@ export class DraftService {
   ): Promise<MessageDto> {
     const { title, text } = dto;
     const now = dayjs().valueOf();
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {
@@ -53,7 +53,7 @@ export class DraftService {
 
     const draft = await this.draftRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
 
@@ -77,10 +77,10 @@ export class DraftService {
   }
 
   public async loadDraft(req: IRequest): Promise<LoadDraftDto> {
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {
@@ -102,10 +102,10 @@ export class DraftService {
   }
 
   public async removeDraft(req: IRequest): Promise<MessageDto> {
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {
