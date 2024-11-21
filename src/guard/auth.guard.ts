@@ -15,15 +15,11 @@ export class AuthGuard implements CanActivate {
       authorization,
     });
     if (!matched) return false;
-
-    // Is bearer token?
     if (!authorization.startsWith('Bearer')) return false;
     const token = authorization.replace('Bearer', '').trim();
-    // Is token not empty?
     if (!token) return false;
     try {
       const verify = this.jwtService.verify(token);
-      // Is JWT Signature valid?
       if (!verify) return false;
       request.token = token;
       return true;
