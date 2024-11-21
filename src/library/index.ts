@@ -1,4 +1,4 @@
-import { PostRules } from 'src/constant';
+import { PostRules } from 'src/config';
 
 const { maxTitleLength, maxTextLength } = PostRules;
 

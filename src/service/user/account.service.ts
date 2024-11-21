@@ -5,7 +5,7 @@ import { UserEntity } from 'src/entity/user.entity';
 import { PostEntity } from 'src/entity/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { IRequest } from 'src/types/headers';
-import { Korean } from 'src/constant/locale';
+import { Korean } from 'src/locale/ko_kr';
 import type { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 

@@ -18,19 +18,17 @@ import {
 import type { IPaginationData } from 'src/types/pagination';
 import type { JwtDecodedPayload } from 'src/types/auth';
 import type { MessageDto } from 'src/dto/message.dto';
+import { pageSize, previewLength } from 'src/config';
 import type { IRequest } from '../../types/headers';
 import { PostEntity } from 'src/entity/post.entity';
 import { UserEntity } from 'src/entity/user.entity';
 import { Recaptcha } from '../../library/recaptcha';
 import { Pagination } from 'src/library/pagination';
-import { Korean } from 'src/constant/locale';
+import { Korean } from 'src/locale/ko_kr';
 import type { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Utility } from 'src/library';
 import * as dayjs from 'dayjs';
-
-const pageSize = Number(process.env.PAGE_SIZE) || 6;
-const previewLength = 100;
 
 const reCaptcha = new Recaptcha();
 const paginator = new Pagination();
@@ -135,11 +133,10 @@ export class PostService {
     query: GetPostPageDto,
   ): Promise<IPaginationData<MyPostsDto[]>> {
     const { page, sort } = query;
-
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {
@@ -222,10 +219,10 @@ export class PostService {
     if (!post) {
       throw new NotFoundException(Korean.POST_NOT_FOUND);
     }
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {
@@ -307,10 +304,10 @@ export class PostService {
   ): Promise<MessageDto> {
     const { id } = query;
 
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {

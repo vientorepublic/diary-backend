@@ -3,7 +3,7 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import { BrandName, Korean, VerifyEmailLocale } from 'src/constant/locale';
+import { BrandName, Korean, VerifyEmailLocale } from 'src/locale/ko_kr';
 import type { RegisterBodyDto } from 'src/dto/auth.dto';
 import type { MessageDto } from 'src/dto/message.dto';
 import type { IRequest } from '../../types/headers';

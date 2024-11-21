@@ -10,7 +10,7 @@ import { DraftEntity } from 'src/entity/draft.entity';
 import { UserEntity } from 'src/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { IRequest } from 'src/types/headers';
-import { Korean } from 'src/constant/locale';
+import { Korean } from 'src/locale/ko_kr';
 import type { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Utility } from 'src/library';
@@ -34,10 +34,10 @@ export class DraftService {
   ): Promise<MessageDto> {
     const { title, text } = dto;
     const now = dayjs().valueOf();
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {
@@ -53,7 +53,7 @@ export class DraftService {
 
     const draft = await this.draftRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
 
@@ -77,10 +77,10 @@ export class DraftService {
   }
 
   public async loadDraft(req: IRequest): Promise<LoadDraftDto> {
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {
@@ -102,10 +102,10 @@ export class DraftService {
   }
 
   public async removeDraft(req: IRequest): Promise<MessageDto> {
-    const decoded = this.jwtService.decode<JwtDecodedPayload>(req.token);
+    const jwtPayload = this.jwtService.decode<JwtDecodedPayload>(req.token);
     const user = await this.userRepository.findOne({
       where: {
-        user_id: decoded.user_id,
+        user_id: jwtPayload.user_id,
       },
     });
     if (!user) {
