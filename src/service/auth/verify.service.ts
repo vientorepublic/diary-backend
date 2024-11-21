@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import type { MessageDto } from 'src/dto/message.dto';
 import type { IdentifierDto } from 'src/dto/auth.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entity/user.entity';
-import { Korean } from 'src/constant/locale';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Korean } from 'src/locale/ko_kr';
 import type { Repository } from 'typeorm';
 import * as dayjs from 'dayjs';
 

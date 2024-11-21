@@ -6,10 +6,10 @@ import { UserEntity } from 'src/entity/user.entity';
 import { Pagination } from 'src/library/pagination';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostPreviewDto } from 'src/dto/post.dto';
-import { Korean } from 'src/constant/locale';
+import { Korean } from 'src/locale/ko_kr';
 import type { Repository } from 'typeorm';
+import { pageSize } from 'src/config';
 
-const pageSize = Number(process.env.PAGE_SIZE) || 6;
 const paginator = new Pagination();
 
 @Injectable()

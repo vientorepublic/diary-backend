@@ -10,7 +10,7 @@ import { DraftEntity } from 'src/entity/draft.entity';
 import { UserEntity } from 'src/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { IRequest } from 'src/types/headers';
-import { Korean } from 'src/constant/locale';
+import { Korean } from 'src/locale/ko_kr';
 import type { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Utility } from 'src/library';
