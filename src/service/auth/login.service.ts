@@ -64,7 +64,7 @@ export class LoginService {
 
     const payload: JwtPayload = {
       user_id: user.user_id,
-      sub: user.id,
+      id: user.id,
     };
     const accessToken = await this.jwtService.signAsync(payload);
     const expiresAt = now + JwtExpiresIn;

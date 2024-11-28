@@ -4,7 +4,7 @@ export interface IAuthorization {
 
 export interface JwtPayload {
   user_id: string;
-  sub: number;
+  id: number;
 }
 
 export interface JwtDecodedPayload extends JwtPayload {
