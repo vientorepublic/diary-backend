@@ -16,7 +16,7 @@
     "prepare": "ts-patch install && typia patch"
   },
   "dependencies": {
-    "@nestia/core": "^3.17.0",
+    "@nestia/core": "^4.0.0",
     "@nestia/e2e": "^0.7.0",
     "@nestia/fetcher": "^4.0.0",
     "@nestia/sdk": "^4.0.0",
